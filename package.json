@@ -1,0 +1,15 @@
+{
+  "name": "backend-software",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "https://github.com/eliseolopez20/backend-software.git",
+  "author": "Pablo Álvarez <palvarezs169@gmail.com>",
+  "license": "MIT",
+  "scripts": {
+    "start": "node index.js",
+    "dev": "nodemon index.js"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.22"
+  }
+}
