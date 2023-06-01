@@ -2,14 +2,20 @@
   "name": "backend-software",
   "version": "1.0.0",
   "main": "index.js",
+  "type": "commonjs",
   "repository": "https://github.com/eliseolopez20/backend-software.git",
   "author": "Pablo Álvarez <palvarezs169@gmail.com>",
   "license": "MIT",
   "scripts": {
-    "start": "node index.js",
-    "dev": "nodemon index.js"
+    "start": "node src/app.js",
+    "dev": "nodemon src/app.js"
   },
   "devDependencies": {
     "nodemon": "^2.0.22"
+  },
+  "dependencies": {
+    "koa": "^2.14.2",
+    "koa-body": "^6.0.1",
+    "koa-logger": "^3.2.1"
   }
 }
