@@ -9,21 +9,27 @@ module.exports = {
         name: 'Tomas',
         lastName: 'Concha',
         email: 'tomas.concha@uc.cl',
-        type: 'player'
+        type: 'player',
+        createdAt: new Date(),
+        updatedAt: new Date()
       },
       {
         id: 0,
         name: 'ADMIN',
         lastName: '',
         email: 'admin@admin.cl',
-        type: 'admin'
+        type: 'admin',
+        createdAt: new Date(),
+        updatedAt: new Date()
       },
       {
         id: 2,
         name: 'Jorge',
         lastName: 'Gonzalez',
         email: 'jorgegonzalez@gmail.com',
-        type: 'owner'
+        type: 'owner',
+        createdAt: new Date(),
+        updatedAt: new Date()
       },
     ])
     /**
