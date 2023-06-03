@@ -16,6 +16,18 @@ module.exports = {
         createdAt: new Date(),
         updatedAt: new Date()
       },
+      {
+        id: 3,
+        ownerId: 1,
+        name: 'Fortín Cruzado',
+        address: 'Camino las Flores 13000',
+        district: 'Las Condes',
+        phoneNumber: '+56290755252',
+        socialMedia: '@fortincruzado',
+        email: 'fortincruzado@gmail.com',
+        createdAt: new Date(),
+        updatedAt: new Date()
+      }
     ])
     /**
      * Add seed commands here.
