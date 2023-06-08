@@ -5,17 +5,22 @@ const enclousures = require('./routes/enclousures.js');
 const fields = require('./routes/fields.js');
 const availabilities = require('./routes/availabilities.js');
 const bookings = require('./routes/bookings.js');
+const auth_middle = require('./middlewares/auth.js');
+const auth = require('./routes/auth.js');
+const jwt = require('koa-jwt');
 
 const router = new Router();
 
 // RUTAS
-router.use('/users',users.routes())
-router.use('/enclousures',enclousures.routes())
-router.use('/fields',fields.routes());
-router.use('/availabilities',availabilities.routes());
-router.use('/bookings',bookings.routes());
+router.use('/auth',auth.routes());
 
+router.use('/users', auth_middle, users.routes());
+router.use('/enclousures', auth_middle, enclousures.routes());
+router.use('/fields', auth_middle, fields.routes());
+router.use('/availabilities', auth_middle, availabilities.routes());
+router.use('/bookings', auth_middle, bookings.routes());
 
+router.use(jwt({secret : process.env.JWT_SECRET,key: 'tokendata'}));
 
 
 module.exports = router;

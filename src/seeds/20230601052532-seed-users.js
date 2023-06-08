@@ -10,6 +10,7 @@ module.exports = {
         lastName: 'Concha',
         email: 'tomas.concha@uc.cl',
         type: 'player',
+        password: '$2a$05$yUuSEPQqtRB5QfacCJvzseqR4L4fk.eQ.gCi1ZPZwrICdcDsOggEe',
         createdAt: new Date(),
         updatedAt: new Date()
       },
@@ -19,6 +20,7 @@ module.exports = {
         lastName: '',
         email: 'admin@admin.cl',
         type: 'admin',
+        password: '$2a$05$yUuSEPQqtRB5QfacCJvzseqR4L4fk.eQ.gCi1ZPZwrICdcDsOggEe',
         createdAt: new Date(),
         updatedAt: new Date()
       },
@@ -28,6 +30,7 @@ module.exports = {
         lastName: 'Gonzalez',
         email: 'jorgegonzalez@gmail.com',
         type: 'owner',
+        password: '$2a$05$yUuSEPQqtRB5QfacCJvzseqR4L4fk.eQ.gCi1ZPZwrICdcDsOggEe',
         createdAt: new Date(),
         updatedAt: new Date()
       },

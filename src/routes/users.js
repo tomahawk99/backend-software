@@ -7,29 +7,11 @@ const Router = require('koa-router');
 const router = new Router();
 
 const {Users} = require('../models');
-
-
-
-// Create a user
-router.post('/users', '/create', async (ctx) => {
-  try {
-    const user = await Users.create({
-      name: ctx.request.body.name,
-      lastName: ctx.request.body.lastName,
-      password: ctx.request.body.password,
-      email: ctx.request.body.email,
-      type: ctx.request.body.type
-    });
-    console.log(user);
-    ctx.body = user;
-  } catch (error) {
-    ctx.status = 500;
-    ctx.body = { error: 'Failed to create user' };
-  }
-});
+const bcrypt = require('bcrypt');
 
 
 // Get all users
+//solo para admin
 router.get('/users', '/', async (ctx) => {
   try {
     const users = await Users.findAll();

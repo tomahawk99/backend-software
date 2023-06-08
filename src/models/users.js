@@ -17,6 +17,9 @@ module.exports = (sequelize, DataTypes) => {
       this.hasMany(models.Enclousures,{
         foreignKey: 'ownerId'
       });
+      this.hasMany(models.Sessions,{
+        foreignKey:'id',
+      })
     }
   }
   Users.init({
