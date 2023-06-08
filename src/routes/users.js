@@ -10,16 +10,60 @@ const {Users} = require('../models');
 const bcrypt = require('bcrypt');
 
 
+router.get('user.show', '/profile', async (ctx) => {
+  try {
+    const session = await ctx.orm.Sessions.findByPk(ctx.session.sessionid);
+    const userid = session.userid;
+    const user = await ctx.orm.Users.findByPk(userid);
+    let userinfo;
+    console.log(user.type);
+    if (user.type=="player"){
+      userinfo = await ctx.orm.Users.findByPk(userid,
+        {
+          include: [
+            { model: ctx.orm.Bookings },
+          ],
+        },
+      );
+    }
+    else if (user.type=="owner"){
+      userinfo = await ctx.orm.Users.findByPk(userid,
+        {
+          include: [
+            { model: ctx.orm.Enclousures }
+          ],
+        },
+      );
+    }
+    ctx.body = userinfo;
+  } catch (error) {
+    console.log(error);
+    ctx.throw(404);
+  }
+});
+
+
 // Get all users
 //solo para admin
 router.get('/users', '/', async (ctx) => {
-  try {
-    const users = await Users.findAll();
-    console.log(users)
-    ctx.body = users;
-  } catch (error) {
-    ctx.status = 500;
-    ctx.body = { error: 'Failed to retrieve enclousures' };
+  const session = await ctx.orm.Sessions.findByPk(ctx.session.sessionid);
+  const userid = session.userid;
+  const user = await ctx.orm.Users.findByPk(userid);
+  let userinfo;
+  console.log(user.type);
+  if (user.type=="admin"){
+    try {
+      const users = await Users.findAll();
+      console.log(users)
+      ctx.body = users;
+    } catch (error) {
+      ctx.status = 500;
+      ctx.body = { error: 'Failed to retrieve users' };
+    }
+  }
+  else{
+    ctx.status = 403;
+    ctx.body = { error: 'Access Denied' };
   }
 });
 

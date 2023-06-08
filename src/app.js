@@ -5,6 +5,7 @@ const cors = require('@koa/cors');
 const router = require('./routes');
 const orm = require('./models');
 const session = require('koa-session');
+const koaJWT = require('koa-jwt');
 
 const app = new Koa();
 
@@ -31,5 +32,6 @@ app.use(async (ctx, next) => {
 app.listen(3000, () => {
   console.log('server is running at http://localhost:3000');
 });
+
 
 module.exports = app;

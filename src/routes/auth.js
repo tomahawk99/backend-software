@@ -45,10 +45,10 @@ router.post('/auth',"/login", async (ctx) => {
     }
 });
 
-router.post('users.create', '/signup', async (ctx) => {
+router.post('/auth', '/signup', async (ctx) => {
     try {
         const hashPassword = await bcrypt.hash(ctx.request.body.password, 5);
-        const user = await ctx.orm.User.create({
+        const user = await ctx.orm.Users.create({
             name: ctx.request.body.name,
             lastName: ctx.request.body.lastName,
             password: hashPassword,
@@ -57,7 +57,7 @@ router.post('users.create', '/signup', async (ctx) => {
         });
         ctx.status = 201;
     } catch (error) {
-        ctx.throw(error);
+        ctx.throw(error.message);
     }
 });
 
