@@ -1,14 +1,13 @@
 const Router = require('koa-router');
 const router = new Router();
-const { Enclousures, Users, Fields } = require('../models');
 
-// Get all Fields
+// Get all fields
 router.get('/fields', '/', async (ctx) => {
     console.log("aca");
     try {
-      const fields = await Fields.findAll();
-      console.log(fields)
-      ctx.body = fields;
+      const fieldsInfo = await ctx.orm.fields.findAll();
+      console.log(fieldsInfo)
+      ctx.body = fieldsInfo;
     } catch (error) {
       ctx.status = 500;
       ctx.body = { error: 'Failed get fields' };
@@ -19,16 +18,16 @@ router.get('/fields', '/', async (ctx) => {
 // Create a field
 router.post('/fields', '/create', async (ctx) => {
     try {
-      // const ownerId = ctx.state.user.id;
-      const owner = await Users.findByPk(1); 
+      // const ownerid = ctx.state.user.id;
+      const owner = await ctx.orm.users.findByPk(1); 
       console.log(owner);
-      ownerId = owner.id;
-      const field = await Fields.create({
+      ownerid = owner.id;
+      const field = await ctx.orm.fields.create({
         number: ctx.request.body.number,
-        enclousureId: ctx.request.body.enclousureId,
-        maxPlayers: ctx.request.body.maxPlayers,
-        minPlayers: ctx.request.body.minPlayers,
-        playerAmount: ctx.request.body.playerAmount,
+        enclousureid: ctx.request.body.enclousureid,
+        maxplayers: ctx.request.body.maxplayers,
+        minplayers: ctx.request.body.minplayers,
+        playeramount: ctx.request.body.playeramount,
       });
       ctx.body = field;
     } catch (error) {
@@ -40,7 +39,7 @@ router.post('/fields', '/create', async (ctx) => {
   // Get one field
 router.get('/fields', '/:id', async (ctx) => {
     try {
-      const field = await Fields.findByPk(ctx.params.id);
+      const field = await ctx.orm.fields.findByPk(ctx.params.id);
       if (!field) {
         ctx.status = 404;
         ctx.body = { error: 'field not found' };
@@ -57,18 +56,18 @@ router.get('/fields', '/:id', async (ctx) => {
   // Update 
 router.put('/fields', '/:id/update',  async (ctx) => {
     try {
-      const field = await Fields.findByPk(ctx.params.id);
+      const field = await ctx.orm.fields.findByPk(ctx.params.id);
       if (!field) {
         ctx.status = 404;
         ctx.body = { error: 'Field not found' };
       } else {
-        const { number, enclousureId, maxPlayers, minPlayers, playerAmount } = ctx.request.body;
+        const { number, enclousureid, maxplayers, minplayers, playeramount } = ctx.request.body;
         await field.update({
             number,
-            enclousureId,
-            maxPlayers,
-            minPlayers,
-            playerAmount
+            enclousureid,
+            maxplayers,
+            minplayers,
+            playeramount
         });
         ctx.body = field;
       }
@@ -82,7 +81,7 @@ router.put('/fields', '/:id/update',  async (ctx) => {
 //DETELE
 router.delete('/fields', '/:id/delete', async (ctx) => {
     try {
-      const field = await Fields.findByPk(ctx.params.id);
+      const field = await ctx.orm.fields.findByPk(ctx.params.id);
       if (!field) {
         ctx.status = 404;
         ctx.body = { error: 'Field not found' };

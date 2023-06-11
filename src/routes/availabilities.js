@@ -1,12 +1,12 @@
 const Router = require('koa-router');
 const router = new Router();
-const { Availabilities, Users, Fields } = require('../models');
+const { availabilities, users, fields } = require('../models');
 
-// Get all Fields
+// Get all fields
 router.get('/availabilities', '/', async (ctx) => {
     try {
-      const availabilities = await Availabilities.findAll();
-      ctx.body = availabilities;
+      const availabilitiesInfo = await availabilities.findAll();
+      ctx.body = availabilitiesInfo;
     } catch (error) {
       ctx.status = 500;
       ctx.body = { error: 'Failed get availabilities' };
@@ -18,8 +18,8 @@ router.get('/availabilities', '/', async (ctx) => {
 router.post('/availabilities', '/create', async (ctx) => {
     try {
         console.log("availabiltyyy");
-      const availbility = await Availabilities.create({
-        fieldId: ctx.request.body.fieldId,
+      const availbility = await availabilities.create({
+        fieldid: ctx.request.body.fieldid,
         timestart: ctx.request.body.timestart,
         timeend: ctx.request.body.timeend,
         available: ctx.request.body.available,
@@ -35,7 +35,7 @@ router.post('/availabilities', '/create', async (ctx) => {
   // Get one field
 router.get('/availabilities', '/:id', async (ctx) => {
     try {
-      const availability = await Availabilities.findByPk(ctx.params.id);
+      const availability = await availabilities.findByPk(ctx.params.id);
       if (!availability) {
         ctx.status = 404;
         ctx.body = { error: 'availability not found' };
@@ -52,14 +52,14 @@ router.get('/availabilities', '/:id', async (ctx) => {
   // Update 
 router.put('/availabilities', '/:id/update',  async (ctx) => {
     try {
-      const updated_availabilty = await Availabilities.findByPk(ctx.params.id);
+      const updated_availabilty = await availabilities.findByPk(ctx.params.id);
       if (!updated_availabilty) {
         ctx.status = 404;
         ctx.body = { error: 'Availability not found' };
       } else {
-        const { fieldId, timestart, timeend, available} = ctx.request.body;
+        const { fieldid, timestart, timeend, available} = ctx.request.body;
         await updated_availabilty.update({
-            fieldId,
+            fieldid,
             timestart,
             timeend,
             available
@@ -76,7 +76,7 @@ router.put('/availabilities', '/:id/update',  async (ctx) => {
 //DETELE
 router.delete('/availabilities', '/:id/delete', async (ctx) => {
     try {
-      const availability = await Availabilities.findByPk(ctx.params.id);
+      const availability = await availabilities.findByPk(ctx.params.id);
       if (!availability) {
         ctx.status = 404;
         ctx.body = { error: 'availability not found' };

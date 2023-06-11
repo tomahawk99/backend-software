@@ -1,15 +1,15 @@
 const Router = require('koa-router');
 const router = new Router();
-const {  Users, Bookings } = require('../models');
+const {  users, bookings } = require('../models');
 
-// Get all Bookings
+// Get all bookings
 router.get('/player', '/getbookings', async (ctx) => {
     try {
-        const session = await ctx.orm.Sessions.findByPk(ctx.session.sessionid);
+        const session = await ctx.orm.sessions.findByPk(ctx.session.sessionid);
         const userid = session.userid;
-        const bookings = await Bookings.findAll({        
+        const bookings = await bookings.findAll({        
             where: {
-            playerId: userid
+            playerid: userid
         }},);
         console.log(bookings)
         ctx.body = bookings;
@@ -24,13 +24,13 @@ router.get('/player', '/getbookings', async (ctx) => {
 // create Booking for player
 router.post('/player', '/booking', async (ctx) => {
     try {
-    const session = await ctx.orm.Sessions.findByPk(ctx.session.sessionid);
+    const session = await ctx.orm.sessions.findByPk(ctx.session.sessionid);
     const userid = session.userid;
-      const booking = await Bookings.create({
+      const booking = await bookings.create({
         active: true,
-        playerId: userid,
-        availabilityId: ctx.request.body.availabilityId,
-        fieldId: ctx.request.body.fieldId,
+        playerid: userid,
+        availabilityid: ctx.request.body.availabilityid,
+        fieldid: ctx.request.body.fieldid,
       });
       ctx.body = booking;
     } catch (error) {
@@ -42,16 +42,16 @@ router.post('/player', '/booking', async (ctx) => {
   // Get one field
 router.get('/player', '/booking/:id', async (ctx) => {
     try {
-        const session = await ctx.orm.Sessions.findByPk(ctx.session.sessionid);
+        const session = await ctx.orm.sessions.findByPk(ctx.session.sessionid);
         const userid = session.userid;
-        const booking = await Bookings.findByPk(ctx.params.id);
+        const booking = await bookings.findByPk(ctx.params.id);
 
       if (!booking) {
         ctx.status = 404;
         ctx.body = { error: 'booking not found' };
       } 
       else {
-        if(booking.playerId == userid){
+        if(booking.playerid == userid){
             ctx.body = booking;
             ctx.status = 201;
         }
@@ -70,16 +70,16 @@ router.get('/player', '/booking/:id', async (ctx) => {
   // Update booking //TODO
 router.put('/player', '/booking/:id',  async (ctx) => {
     try {
-        const session = await ctx.orm.Sessions.findByPk(ctx.session.sessionid);
+        const session = await ctx.orm.sessions.findByPk(ctx.session.sessionid);
         const userid = session.userid;
-        const booking = await Bookings.findByPk(ctx.params.id);
+        const booking = await bookings.findByPk(ctx.params.id);
         if (!booking) {
             ctx.status = 404;
             ctx.body = { error: 'booking not found' };
         }     
         else {
             const { active } = ctx.request.body;
-            if (booking.playerId == userid){
+            if (booking.playerid == userid){
                 await booking.update({
                 active
                 });
@@ -101,15 +101,15 @@ router.put('/player', '/booking/:id',  async (ctx) => {
 //DETELE
 router.delete('/player', '/booking/:id', async (ctx) => {
     try {
-        const session = await ctx.orm.Sessions.findByPk(ctx.session.sessionid);
+        const session = await ctx.orm.sessions.findByPk(ctx.session.sessionid);
         const userid = session.userid;
-        const booking = await Bookings.findByPk(ctx.params.id);
+        const booking = await bookings.findByPk(ctx.params.id);
         if (!booking) {
             ctx.status = 404;
             ctx.body = { error: 'booking not found' };
         }     
         else {
-            if (booking.playerId == userid){
+            if (booking.playerid == userid){
                 await booking.destroy();
                 ctx.body = { message: 'booking deleted' };
                 ctx.status = 201;

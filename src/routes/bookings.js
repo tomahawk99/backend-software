@@ -1,14 +1,14 @@
 const Router = require('koa-router');
 const router = new Router();
-const {  Users, Bookings } = require('../models');
+const {  users, bookings } = require('../models');
 
-// Get all Bookings
+// Get all bookings
 router.get('/bookings', '/', async (ctx) => {
     console.log("aca");
     try {
-      const bookings = await Bookings.findAll();
-      console.log(bookings)
-      ctx.body = bookings;
+      const bookingsInfo = await bookings.findAll();
+      console.log(bookingsInfo)
+      ctx.body = bookingsInfo;
     } catch (error) {
         console.error(error);
       ctx.status = 500;
@@ -20,11 +20,11 @@ router.get('/bookings', '/', async (ctx) => {
 // Create a field
 router.post('/bookings', '/create', async (ctx) => {
     try {
-      const booking = await Bookings.create({
+      const booking = await bookings.create({
         active: ctx.request.body.active,
-        playerId: ctx.request.body.playerId,
-        availabilityId: ctx.request.body.availabilityId,
-        fieldId: ctx.request.body.fieldId,
+        playerid: ctx.request.body.playerid,
+        availabilityid: ctx.request.body.availabilityid,
+        fieldid: ctx.request.body.fieldid,
       });
       ctx.body = booking;
     } catch (error) {
@@ -36,7 +36,7 @@ router.post('/bookings', '/create', async (ctx) => {
   // Get one field
 router.get('/bookings', '/:id', async (ctx) => {
     try {
-      const booking = await Bookings.findByPk(ctx.params.id);
+      const booking = await bookings.findByPk(ctx.params.id);
       if (!booking) {
         ctx.status = 404;
         ctx.body = { error: 'booking not found' };
@@ -53,17 +53,17 @@ router.get('/bookings', '/:id', async (ctx) => {
   // Update 
 router.put('/bookings', '/:id/update',  async (ctx) => {
     try {
-      const field = await Bookings.findByPk(ctx.params.id);
+      const field = await bookings.findByPk(ctx.params.id);
       if (!field) {
         ctx.status = 404;
         ctx.body = { error: 'Field not found' };
       } else {
-        const { active, playerId, availabilityId, fieldId } = ctx.request.body;
+        const { active, playerid, availabilityid, fieldid } = ctx.request.body;
         await field.update({
             active,
-            playerId,
-            availabilityId,
-            fieldId
+            playerid,
+            availabilityid,
+            fieldid
         });
         ctx.body = field;
       }
@@ -77,7 +77,7 @@ router.put('/bookings', '/:id/update',  async (ctx) => {
 //DETELE
 router.delete('/bookings', '/:id/delete', async (ctx) => {
     try {
-      const booking = await Bookings.findByPk(ctx.params.id);
+      const booking = await bookings.findByPk(ctx.params.id);
       if (!booking) {
         ctx.status = 404;
         ctx.body = { error: 'booking not found' };

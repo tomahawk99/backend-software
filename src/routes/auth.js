@@ -6,7 +6,7 @@ const router = new Router();
 
 router.post('/auth',"/login", async (ctx) => {
     try {
-        const user = await ctx.orm.Users.findOne({
+        const user = await ctx.orm.users.findOne({
             where: { email: ctx.request.body.email },
             //el include no cacho !!!
             /*
@@ -19,7 +19,7 @@ router.post('/auth',"/login", async (ctx) => {
             const compare = await bcrypt.compare(ctx.request.body.password, user.password);
             if (compare) {
                 // Creamos la sesión en la base de datos y le agregamos el id a la cookie
-                const new_session = await ctx.orm.Sessions.create({
+                const new_session = await ctx.orm.sessions.create({
                     userid: user.id
                 });
                 ctx.session.sessionid = new_session.id;
@@ -48,9 +48,9 @@ router.post('/auth',"/login", async (ctx) => {
 router.post('/auth', '/signup', async (ctx) => {
     try {
         const hashPassword = await bcrypt.hash(ctx.request.body.password, 5);
-        const user = await ctx.orm.Users.create({
+        const user = await ctx.orm.users.create({
             name: ctx.request.body.name,
-            lastName: ctx.request.body.lastName,
+            lastname: ctx.request.body.lastname,
             password: hashPassword,
             email: ctx.request.body.email,
             type: ctx.request.body.type
@@ -66,9 +66,9 @@ router.post('/auth', '/create', async (ctx) => {
     try {
         console.log("xdxdxd")
       const hashPassword = await bcrypt.hash(ctx.request.body.password,5);
-      const user = await Users.create({
+      const user = await users.create({
         name: ctx.request.body.name,
-        lastName: ctx.request.body.lastName,
+        lastname: ctx.request.body.lastname,
         password: hashPassword,
         email: ctx.request.body.email,
         type: ctx.request.body.type
@@ -85,7 +85,7 @@ router.post('/auth', '/create', async (ctx) => {
 
 router.post('/logout', async (ctx) => {
     try {
-        await ctx.orm.Sessions.destroy({
+        await ctx.orm.sessions.destroy({
             where: { id: `${ctx.session.sessionid}` }
         });
         ctx.session.sessionid = undefined;

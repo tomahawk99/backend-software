@@ -6,31 +6,31 @@ const Router = require('koa-router');
 
 const router = new Router();
 
-const {Users} = require('../models');
+//const {users} = require('../models');
 const bcrypt = require('bcrypt');
 
 
 router.get('/profile', '/info', async (ctx) => {
   try {
-    const session = await ctx.orm.Sessions.findByPk(ctx.session.sessionid);
+    const session = await ctx.orm.sessions.findByPk(ctx.session.sessionid);
     const userid = session.userid;
-    const user = await ctx.orm.Users.findByPk(userid);
+    const user = await ctx.orm.users.findByPk(userid);
     let userinfo;
     console.log(user.type);
     if (user.type=="player"){
-      userinfo = await ctx.orm.Users.findByPk(userid,
+      userinfo = await ctx.orm.users.findByPk(userid,
         {
           include: [
-            { model: ctx.orm.Bookings },
+            { model: ctx.orm.bookings },
           ],
         },
       );
     }
     else if (user.type=="owner"){
-      userinfo = await ctx.orm.Users.findByPk(userid,
+      userinfo = await ctx.orm.users.findByPk(userid,
         {
           include: [
-            { model: ctx.orm.Enclousures }
+            { model: ctx.orm.enclousures }
           ],
         },
       );
@@ -45,19 +45,19 @@ router.get('/profile', '/info', async (ctx) => {
 // Update a player
 router.put('/profile', '/update',  async (ctx) => {
     try {
-    const session = await ctx.orm.Sessions.findByPk(ctx.session.sessionid);
+    const session = await ctx.orm.sessions.findByPk(ctx.session.sessionid);
     const userid = session.userid;
-    const user = await ctx.orm.Users.findByPk(userid);
+    const user = await ctx.orm.users.findByPk(userid);
     console.log(user);
     if (!user) {
         ctx.status = 404;
         ctx.body = { error: 'User not found' };
     }
     else {
-        const { name, lastName, password, email, type } = ctx.request.body;
+        const { name, lastname, password, email, type } = ctx.request.body;
         await user.update({
           name,
-          lastName,
+          lastname,
           password,
           email,
           type
@@ -75,10 +75,10 @@ router.put('/profile', '/update',  async (ctx) => {
   // Delete a player
   router.delete('/profile', '/delete',  async (ctx) => {
     try {
-    const session = await ctx.orm.Sessions.findByPk(ctx.session.sessionid);
+    const session = await ctx.orm.sessions.findByPk(ctx.session.sessionid);
     const userid = session.userid;
     console.log(userid);
-    const user = await ctx.orm.Users.findByPk(userid);
+    const user = await ctx.orm.users.findByPk(userid);
       console.log(user);
       if (!user) {
         ctx.status = 404;

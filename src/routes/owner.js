@@ -1,17 +1,17 @@
 const Router = require('koa-router');
 const router = new Router();
-const { Enclousures, Users } = require('../models');
+const { enclousures, users } = require('../models');
 
 
 
-// Get all Enclousures
+// Get all enclousures
 router.get('/owner', '/enclousures', async (ctx) => {
     try {
-        const session = await ctx.orm.Sessions.findByPk(ctx.session.sessionid);
+        const session = await ctx.orm.sessions.findByPk(ctx.session.sessionid);
         const userid = session.userid;
-        const enclousures = await Enclousures.findAll({
+        const enclousures = await enclousures.findAll({
             where: {
-                ownerId: userid
+                ownerid: userid
             }
         });
         console.log(enclousures)
@@ -25,19 +25,19 @@ router.get('/owner', '/enclousures', async (ctx) => {
   
   router.post('/owner', '/createenclosure', async (ctx) => {
     try {
-      // const ownerId = ctx.state.user.id;
-      const session = await ctx.orm.Sessions.findByPk(ctx.session.sessionid);
+      // const ownerid = ctx.state.user.id;
+      const session = await ctx.orm.sessions.findByPk(ctx.session.sessionid);
       const userid = session.userid;
-      const owner = await Users.findByPk(userid); // hardcoded for now
+      const owner = await users.findByPk(userid); // hardcoded for now
       console.log(owner);
-      ownerId = owner.id;
-      const enclousure = await Enclousures.create({
+      ownerid = owner.id;
+      const enclousure = await enclousures.create({
         name: ctx.request.body.name,
-        ownerId: ownerId,
+        ownerid: ownerid,
         address: ctx.request.body.address,
         district: ctx.request.body.district,
-        phoneNumber:  ctx.request.body.phoneNumber,
-        socialMedia: ctx.request.body.socialMedia,
+        phonenumber:  ctx.request.body.phonenumber,
+        socialmedia: ctx.request.body.socialmedia,
         email: ctx.request.body.email
       });
       console.log(enclousure);
@@ -51,11 +51,11 @@ router.get('/owner', '/enclousures', async (ctx) => {
   // Get a single enclousure by ID
   router.get('/owner', '/enclousure/:id', async (ctx) => {
     try {
-        const session = await ctx.orm.Sessions.findByPk(ctx.session.sessionid);
+        const session = await ctx.orm.sessions.findByPk(ctx.session.sessionid);
         const userid = session.userid;
-        const enclousure = await Enclousures.findByPk(ctx.params.id);
+        const enclousure = await enclousures.findByPk(ctx.params.id);
         console.log(enclousure);
-        if (!enclousure || userid!=enclousure.ownerId) {
+        if (!enclousure || userid!=enclousure.ownerid) {
             ctx.status = 404;
             ctx.body = { error: 'Enclousure not found' };
         } 
@@ -73,22 +73,22 @@ router.get('/owner', '/enclousures', async (ctx) => {
   // Update an enclousure
   router.put('/owner', '/enclousure/:id',  async (ctx) => {
     try {
-        const session = await ctx.orm.Sessions.findByPk(ctx.session.sessionid);
+        const session = await ctx.orm.sessions.findByPk(ctx.session.sessionid);
         const userid = session.userid;
-        const enclousure = await Enclousures.findByPk(ctx.params.id);
+        const enclousure = await enclousures.findByPk(ctx.params.id);
         console.log(enclousure);
-        if (!enclousure || userid!=enclousure.ownerId) {
+        if (!enclousure || userid!=enclousure.ownerid) {
             ctx.status = 404;
             ctx.body = { error: 'Enclousure not found' };
         } 
         else {
-        const { name, address, district, phoneNumber, socialMedia, email } = ctx.request.body;
+        const { name, address, district, phonenumber, socialmedia, email } = ctx.request.body;
         await enclousure.update({
           name,
           address,
           district,
-          phoneNumber,
-          socialMedia,
+          phonenumber,
+          socialmedia,
           email
         });
         ctx.body = enclousure;
@@ -104,11 +104,11 @@ router.get('/owner', '/enclousures', async (ctx) => {
   // Delete an enclousure
   router.delete('/owner', '/enclousure/:id', async (ctx) => {
     try {
-        const session = await ctx.orm.Sessions.findByPk(ctx.session.sessionid);
+        const session = await ctx.orm.sessions.findByPk(ctx.session.sessionid);
         const userid = session.userid;
-        const enclousure = await Enclousures.findByPk(ctx.params.id);
+        const enclousure = await enclousures.findByPk(ctx.params.id);
         console.log(enclousure);
-        if (!enclousure || userid!=enclousure.ownerId) {
+        if (!enclousure || userid!=enclousure.ownerid) {
             ctx.status = 404;
             ctx.body = { error: 'Enclousure not found' };
         } else {

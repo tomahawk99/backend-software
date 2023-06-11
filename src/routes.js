@@ -26,7 +26,7 @@ router.use('/player', auth_middle, player.routes());
 
 
 router.use('/users', auth_middle, users.routes());
-router.use('/enclousures', admin, enclousures.routes());
+router.use('/enclousures', auth_middle, enclousures.routes());
 router.use('/fields', auth_middle, fields.routes());
 router.use('/availabilities', auth_middle, availabilities.routes());
 router.use('/bookings', auth_middle, bookings.routes());

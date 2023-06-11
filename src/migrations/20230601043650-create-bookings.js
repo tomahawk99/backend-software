@@ -2,39 +2,39 @@
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
-    await queryInterface.createTable('Bookings', {
+    await queryInterface.createTable('bookings', {
       id: {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
         type: Sequelize.INTEGER
       },
-      playerId: {
+      playerid: {
         type: Sequelize.INTEGER,
-        references: {model: 'Users', key: 'id'}
+        references: {model: 'users', key: 'id'}
       },
-      availabilityId: {
+      availabilityid: {
         type: Sequelize.INTEGER,
-        references: {model: 'Availabilities', key: 'id'}
+        references: {model: 'availabilities', key: 'id'}
       },
-      fieldId: {
+      fieldid: {
         type: Sequelize.INTEGER,
-        references: {model: 'Fields', key: 'id'}
+        references: {model: 'fields', key: 'id'}
       },
       active: {
         type: Sequelize.BOOLEAN
       },
-      createdAt: {
+      createdat: {
         allowNull: false,
         type: Sequelize.DATE
       },
-      updatedAt: {
+      updatedat: {
         allowNull: false,
         type: Sequelize.DATE
       }
     });
   },
   async down(queryInterface, Sequelize) {
-    await queryInterface.dropTable('Bookings');
+    await queryInterface.dropTable('bookings');
   }
 };

@@ -2,16 +2,16 @@
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
-    await queryInterface.createTable('Enclousures', {
+    await queryInterface.createTable('enclousures', {
       id: {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
         type: Sequelize.INTEGER
       },
-      ownerId: {
+      ownerid: {
         type: Sequelize.INTEGER,
-        references: {model: 'Users', key: 'id'}
+        references: {model: 'users', key: 'id'}
       },
       name: {
         type: Sequelize.STRING
@@ -22,26 +22,26 @@ module.exports = {
       district: {
         type: Sequelize.STRING
       },
-      phoneNumber: {
+      phonenumber: {
         type: Sequelize.STRING
       },
-      socialMedia: {
+      socialmedia: {
         type: Sequelize.STRING
       },
       email: {
         type: Sequelize.STRING
       },
-      createdAt: {
+      createdat: {
         allowNull: false,
         type: Sequelize.DATE
       },
-      updatedAt: {
+      updatedat: {
         allowNull: false,
         type: Sequelize.DATE
       }
     });
   },
   async down(queryInterface, Sequelize) {
-    await queryInterface.dropTable('Enclousures');
+    await queryInterface.dropTable('enclousures');
   }
 };

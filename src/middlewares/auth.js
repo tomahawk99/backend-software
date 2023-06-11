@@ -4,7 +4,7 @@ module.exports = async (ctx, next) => {
     }
 
     try {
-        const session = await ctx.orm.Sessions.findByPk(ctx.session.sessionid);
+        const session = await ctx.orm.sessions.findByPk(ctx.session.sessionid);
         if (session) {
             await next();
         } else {

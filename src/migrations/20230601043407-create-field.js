@@ -2,40 +2,40 @@
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
-    await queryInterface.createTable('Fields', {
+    await queryInterface.createTable('fields', {
       id: {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
         type: Sequelize.INTEGER
       },
-      enclousureId: {
+      enclousureid: {
         type: Sequelize.INTEGER,
-        references: {model: 'Enclousures', key: 'id'}
+        references: {model: 'enclousures', key: 'id'}
       },
       number: {
         type: Sequelize.INTEGER
       },
-      maxPlayers: {
+      maxplayers: {
         type: Sequelize.INTEGER
       },
-      minPlayers: {
+      minplayers: {
         type: Sequelize.INTEGER
       },
-      playerAmount: {
+      playeramount: {
         type: Sequelize.INTEGER
       },
-      createdAt: {
+      createdat: {
         allowNull: false,
         type: Sequelize.DATE
       },
-      updatedAt: {
+      updatedat: {
         allowNull: false,
         type: Sequelize.DATE
       }
     });
   },
   async down(queryInterface, Sequelize) {
-    await queryInterface.dropTable('Fields');
+    await queryInterface.dropTable('fields');
   }
 };
