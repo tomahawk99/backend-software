@@ -29,7 +29,9 @@ app.use(async (ctx, next) => {
   ctx.body = 'Hello World!';
 });
 
-app.listen(3000, () => {
+const port = process.env.PORT || 3000;
+
+app.listen(port, () => {
   console.log('server is running at http://localhost:3000');
 });
 

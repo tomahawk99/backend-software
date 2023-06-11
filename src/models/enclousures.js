@@ -16,7 +16,7 @@ module.exports = (sequelize, DataTypes) => {
         foreignKey: 'ownerId',
       });
       this.hasMany(models.Fields,{
-        foreignKey: 'enclousureId'
+        foreignKey: 'fieldId'
       });
     }
   }

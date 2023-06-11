@@ -25,7 +25,7 @@ router.post('/fields', '/create', async (ctx) => {
       ownerId = owner.id;
       const field = await Fields.create({
         number: ctx.request.body.number,
-        EnclousureId: ctx.request.body.EnclousureId,
+        enclousureId: ctx.request.body.enclousureId,
         maxPlayers: ctx.request.body.maxPlayers,
         minPlayers: ctx.request.body.minPlayers,
         playerAmount: ctx.request.body.playerAmount,
@@ -62,10 +62,10 @@ router.put('/fields', '/:id/update',  async (ctx) => {
         ctx.status = 404;
         ctx.body = { error: 'Field not found' };
       } else {
-        const { number, EnclousureId, maxPlayers, minPlayers, playerAmount } = ctx.request.body;
+        const { number, enclousureId, maxPlayers, minPlayers, playerAmount } = ctx.request.body;
         await field.update({
             number,
-            EnclousureId,
+            enclousureId,
             maxPlayers,
             minPlayers,
             playerAmount
