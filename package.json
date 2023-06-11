@@ -1,14 +1,14 @@
 {
   "name": "backend-software",
   "version": "1.0.0",
-  "main": "index.js",
+  "main": "app.js",
   "type": "commonjs",
   "repository": "https://github.com/eliseolopez20/backend-software.git",
   "author": "Pablo Álvarez <palvarezs169@gmail.com>",
   "license": "MIT",
   "scripts": {
-    "start": "node src/index.js",
-    "dev": "nodemon src/index.js"
+    "start": "node src/app.js",
+    "dev": "nodemon src/app.js"
   },
   "devDependencies": {
     "nodemon": "^2.0.22"
