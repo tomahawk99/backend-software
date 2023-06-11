@@ -18,19 +18,24 @@ if (config.use_env_variable) {
 }
 */
 
-const sequelize1 = new Sequelize(process.env.DATABASE_URL, {
-  ssl: true,
+const port = (process.env.NODE_ENV === 'production') ? process.env.PGPORT : 5342;
+
+
+const sequelize1 = new Sequelize(process.env.DATABASE_URL,
+  {
+  //ssl: true,
+  port: port,
   define:{
     timestamps: false
   },
   dialect: process.env.DB_DIALECT || 'postgres',
   // https://stackoverflow.com/questions/61350186/how-to-solve-the-database-connection-error-sequelizeconnectionerror
-  dialectOptions: {
-    ssl: {
-      require: true,
-      rejectUnauthorized: false,
-    },
-  },
+  // dialectOptions: {
+  //   ssl: {
+  //     require: true,
+  //     rejectUnauthorized: false,
+  //   },
+  // },
 });
 
 const sequelize2 = new Sequelize(config);
