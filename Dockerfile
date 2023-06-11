@@ -11,10 +11,10 @@ COPY package*.json ./
 RUN npm install
 
 # Copiar el código fuente de la aplicación a la imagen
-COPY . .
+COPY . /src
 
 # Comando para ejecutar la aplicación
-CMD [ "node", "app.js" ]
+CMD [ "npm", "start" ]
 
 # Exponer el puerto en el que la aplicación se ejecuta
 EXPOSE 3000
