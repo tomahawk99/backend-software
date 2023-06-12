@@ -3,8 +3,7 @@ const router = new Router();
 const { Enclousures, Users, Fields } = require('../models');
 
 // Get all Fields
-router.get('/fields', '/', async (ctx) => {
-    console.log("aca");
+router.get('/fields', async (ctx) => {
     try {
       const fields = await Fields.findAll();
       console.log(fields)

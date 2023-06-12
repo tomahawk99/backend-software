@@ -4,6 +4,9 @@ const {
 } = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
   class Fields extends Model {
+    static findByPk(id) {
+      return this.findOne({ where: { id } });
+    }
     /**
      * Helper method for defining associations.
      * This method is not a part of Sequelize lifecycle.
