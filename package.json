@@ -8,9 +8,11 @@
   "license": "MIT",
   "scripts": {
     "start": "node src/index.js",
-    "dev": "nodemon src/index.js"
+    "dev": "nodemon src/index.js",
+    "test": "jest --coverage --detectOpenHandles"
   },
   "devDependencies": {
+    "jest": "^29.5.0",
     "nodemon": "^2.0.22"
   },
   "dependencies": {
@@ -25,6 +27,7 @@
     "koa-router": "^12.0.0",
     "pg": "^8.11.0",
     "sequelize": "^6.31.1",
-    "sequelize-cli": "^6.6.0"
+    "sequelize-cli": "^6.6.0",
+    "supertest": "^6.3.3"
   }
 }
