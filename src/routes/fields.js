@@ -3,10 +3,10 @@ const router = new Router();
 const { Enclousures, Users, Fields } = require('../models');
 
 // Get all Fields
-router.get('/fields', async (ctx) => {
+router.get('/fields', '/', async (ctx) => {
     try {
       const fields = await Fields.findAll();
-      console.log(fields)
+   
       ctx.body = fields;
     } catch (error) {
       ctx.status = 500;
@@ -20,11 +20,11 @@ router.post('/fields', '/create', async (ctx) => {
     try {
       // const ownerId = ctx.state.user.id;
       const owner = await Users.findByPk(1); 
-      console.log(owner);
+
       ownerId = owner.id;
       const field = await Fields.create({
         number: ctx.request.body.number,
-        EnclousureId: ctx.request.body.EnclousureId,
+        enclousureId: ctx.request.body.enclousureId,
         maxPlayers: ctx.request.body.maxPlayers,
         minPlayers: ctx.request.body.minPlayers,
         playerAmount: ctx.request.body.playerAmount,

@@ -20,7 +20,6 @@ router.post('/users', '/create', async (ctx) => {
       email: ctx.request.body.email,
       type: ctx.request.body.type
     });
-    console.log(user);
     ctx.body = user;
   } catch (error) {
     ctx.status = 500;
@@ -33,7 +32,6 @@ router.post('/users', '/create', async (ctx) => {
 router.get('/users', '/', async (ctx) => {
   try {
     const users = await Users.findAll();
-    console.log(users)
     ctx.body = users;
   } catch (error) {
     ctx.status = 500;
@@ -45,7 +43,6 @@ router.get('/users', '/', async (ctx) => {
 router.get('/users', '/:id', async (ctx) => {
   try {
     const user = await Users.findByPk(ctx.params.id);
-    console.log(user);
     if (!user) {
       ctx.status = 404;
       ctx.body = { error: 'User not found' };
@@ -63,7 +60,6 @@ router.get('/users', '/:id', async (ctx) => {
 router.put('/users', '/:id/update',  async (ctx) => {
   try {
     const user = await Users.findByPk(ctx.params.id);
-    console.log(user);
     if (!user) {
       ctx.status = 404;
       ctx.body = { error: 'User not found' };
@@ -89,7 +85,6 @@ router.put('/users', '/:id/update',  async (ctx) => {
 router.delete('/users', '/:id/delete', async (ctx) => {
   try {
     const user = await Users.findByPk(ctx.params.id);
-    console.log(user);
     if (!user) {
       ctx.status = 404;
       ctx.body = { error: 'User not found' };

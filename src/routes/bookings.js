@@ -4,10 +4,8 @@ const {  Users, Bookings } = require('../models');
 
 // Get all Bookings
 router.get('/bookings', '/', async (ctx) => {
-    console.log("aca");
     try {
       const bookings = await Bookings.findAll();
-      console.log(bookings)
       ctx.body = bookings;
     } catch (error) {
         console.error(error);

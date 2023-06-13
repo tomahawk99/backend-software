@@ -17,7 +17,7 @@ router.get('/availabilities', '/', async (ctx) => {
 // Create a field
 router.post('/availabilities', '/create', async (ctx) => {
     try {
-        console.log("availabiltyyy");
+
       const availbility = await Availabilities.create({
         fieldId: ctx.request.body.fieldId,
         timestart: ctx.request.body.timestart,
