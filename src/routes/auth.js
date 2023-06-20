@@ -29,7 +29,7 @@ router.post('/auth',"/login", async (ctx) => {
                 var token = JWT.sign(payload, `${process.env.JWT_SECRET}`);
 
                 // Lo enviamos
-                ctx.response.body = { token: token };
+                ctx.response.body = { token: token , cookie: new_session.id};
 
                 ctx.status = 201;
             } else {

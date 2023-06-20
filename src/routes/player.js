@@ -7,12 +7,12 @@ router.get('/player', '/getbookings', async (ctx) => {
     try {
         const session = await ctx.orm.sessions.findByPk(ctx.session.sessionid);
         const userid = session.userid;
-        const bookings = await bookings.findAll({        
+        const Bookings = await ctx.orm.bookings.findAll({        
             where: {
             playerid: userid
         }},);
-        console.log(bookings)
-        ctx.body = bookings;
+        console.log(Bookings)
+        ctx.body = Bookings;
     } catch (error) {
         console.error(error);
         ctx.status = 500;
