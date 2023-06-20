@@ -25,7 +25,7 @@ router.post('/auth',"/login", async (ctx) => {
                 ctx.session.sessionid = new_session.id;
 
                 // Creamos el jwt
-                payload = { matches: user.matchesUser1 }; //!!!
+                payload = { sessionId :  new_session.id}; //!!!
                 var token = JWT.sign(payload, `${process.env.JWT_SECRET}`);
 
                 // Lo enviamos
