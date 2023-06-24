@@ -55,6 +55,7 @@ router.post('/auth', '/signup', async (ctx) => {
             email: ctx.request.body.email,
             type: ctx.request.body.type
         });
+        ctx.body = { message: 'Created' };
         ctx.status = 201;
     } catch (error) {
         ctx.throw(error.message);
