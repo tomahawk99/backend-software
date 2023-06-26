@@ -29,6 +29,10 @@ app.use(router.routes());
 
 app.use(async (ctx, next) => {
   ctx.body = 'Hello World!';
+  ctx.set('Access-Control-Allow-Credentials', 'true');
+  ctx.set('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept, withcredentials'); // Asegúrate de incluir 'withcredentials' aquí
+  await next();
+
 });
 
 const port = process.env.PORT || 3000;
