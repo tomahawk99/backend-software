@@ -24,18 +24,11 @@ router.use('/profile', auth_middle, profile.routes());
 router.use('/owner', auth_middle, owner.routes());
 router.use('/player', auth_middle, player.routes());
 
-
-// router.use('/users', auth_middle, users.routes());
-// router.use('/enclousures', auth_middle, enclousures.routes());
-// router.use('/fields', auth_middle, fields.routes());
-// router.use('/availabilities', auth_middle, availabilities.routes());
-// router.use('/bookings', auth_middle, bookings.routes());
-
-router.use('/users', admin, users.routes());
-router.use('/enclousures', admin, enclousures.routes());
-router.use('/fields', admin, fields.routes());
-router.use('/availabilities', admin, availabilities.routes());
-router.use('/bookings', admin, bookings.routes());
+router.use('/users', auth_middle, users.routes());
+router.use('/enclousures', auth_middle, enclousures.routes());
+router.use('/fields', auth_middle, fields.routes());
+router.use('/availabilities', auth_middle, availabilities.routes());
+router.use('/bookings', auth_middle, bookings.routes());
 
 router.use(jwt({secret : process.env.JWT_SECRET,key: 'tokendata'}));
 

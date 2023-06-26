@@ -1,20 +1,20 @@
 const Router = require('koa-router');
 const bcrypt = require('bcrypt');
 const JWT = require('jsonwebtoken');
+const { Op } = require('sequelize');
+
 
 const router = new Router();
 
 router.post('/auth',"/login", async (ctx) => {
     try {
         const user = await ctx.orm.users.findOne({
-            where: { email: ctx.request.body.email },
-            //el include no cacho !!!
-            /*
-            include: [
-                { model: ctx.orm.Match, attributes: ['id'], as: 'matchesUser1' }
-            ]
-            */
-        });
+            where: {
+              email: {
+                [Op.eq]: ctx.request.body.email,
+              },
+            },
+          });
         if (user) {
             const compare = await bcrypt.compare(ctx.request.body.password, user.password);
             if (compare) {
