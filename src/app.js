@@ -9,7 +9,9 @@ const koaJWT = require('koa-jwt');
 
 const app = new Koa();
 
-app.use(cors());
+app.use(cors({
+  allowHeaders: ['cookie']
+}));
 app.context.orm = orm;
 
 app.use(KoaLogger());
