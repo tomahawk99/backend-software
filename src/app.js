@@ -10,7 +10,9 @@ const koaJWT = require('koa-jwt');
 const app = new Koa();
 
 app.use(cors({
-  allowHeaders: ['cookie']
+  'Access-Control-Allow-Headers': ['cookie'],
+  'Access-Control-Allow-Credentials' :true,
+  'Access-Control-Allow-Origin': ['http://localhost:3001/','https://front-software2023-production.up.railway.app/']
 }));
 app.context.orm = orm;
 
