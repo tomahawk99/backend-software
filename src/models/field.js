@@ -18,10 +18,12 @@ module.exports = (sequelize, DataTypes) => {
     }
   }
   fields.init({
+    name: DataTypes.STRING,
     number: DataTypes.INTEGER,
     maxplayers: DataTypes.INTEGER,
     minplayers: DataTypes.INTEGER,
-    playeramount: DataTypes.INTEGER
+    playeramount: DataTypes.INTEGER,
+    ownerid: DataTypes.INTEGER,
   }, {
     sequelize,
     modelName: 'fields',
