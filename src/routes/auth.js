@@ -55,7 +55,18 @@ router.post('/auth', '/signup', async (ctx) => {
             email: ctx.request.body.email,
             type: ctx.request.body.type
         });
-        ctx.body = { message: 'Created' };
+        const new_session = await ctx.orm.sessions.create({
+            userid: user.id
+        });
+        ctx.session.sessionid = new_session.id;
+
+        // Creamos el jwt
+        payload = { sessionId :  new_session.id}; //!!!
+        var token = JWT.sign(payload, `${process.env.JWT_SECRET}`);
+
+        // Lo enviamos
+        ctx.response.body = { message: 'Created', token: token , cookie: new_session.id};
+
         ctx.status = 201;
     } catch (error) {
         ctx.throw(error.message);
