@@ -6,13 +6,15 @@ const { enclousures, users } = require('../models');
 
 
 // Create an enclousure
-router.post('/enclousures', '/create', async (ctx) => {
+router.post('/enclousures', '/', async (ctx) => {
   try {
     // const ownerid = ctx.state.user.id;
-    const owner = await users.findByPk(1); // hardcoded for now
+    const session = await ctx.orm.sessions.findByPk(ctx.session.sessionid);
+    const userid = session.userid;
+    const owner = await users.findByPk(userid); 
     console.log(owner);
     ownerid = owner.id;
-    const enclousure = await enclousures.create({
+    const enclousure = await ctx.orm.enclousures.create({
       name: ctx.request.body.name,
       ownerid: ownerid,
       address: ctx.request.body.address,
@@ -33,10 +35,18 @@ router.post('/enclousures', '/create', async (ctx) => {
 // Get all enclousures
 router.get('/enclousures', '/', async (ctx) => {
   try {
-    const enclousuresInfo = await enclousures.findAll();
-    console.log(enclousuresInfo)
-    ctx.body = enclousuresInfo;
-  } catch (error) {
+    const session = await ctx.orm.sessions.findByPk(ctx.session.sessionid);
+    const userid = session.userid;
+    console.log(userid)
+    const enclousures = await ctx.orm.enclousures.findAll({
+        where: {
+            ownerid: userid
+        }
+    });
+    console.log(enclousures)
+    ctx.body = enclousures;
+  } 
+  catch (error) {
     ctx.status = 500;
     ctx.body = { error: 'Failed to retrieve enclousures' };
   }
@@ -46,13 +56,22 @@ router.get('/enclousures', '/', async (ctx) => {
 // Get a single enclousure by ID
 router.get('/enclousures', '/:id', async (ctx) => {
   try {
-    const enclousure = await enclousures.findByPk(ctx.params.id);
+    const session = await ctx.orm.sessions.findByPk(ctx.session.sessionid);
+    const userid = session.userid;
+    const enclousure = await ctx.orm.enclousures.findByPk(ctx.params.id);
     console.log(enclousure);
     if (!enclousure) {
-      ctx.status = 404;
-      ctx.body = { error: 'Enclousure not found' };
-    } else {
-      ctx.body = enclousure;
+        ctx.status = 404;
+        ctx.body = { error: 'Enclousure not found for user' };
+    } 
+    else {
+      if(userid!=enclousure.ownerid){
+        ctx.status = 401;
+        ctx.body = { error: 'enclousure doesnt belong to user' };
+      }
+      else{
+        ctx.body = enclousure;
+      }
     }
   } catch (error) {
     ctx.status = 500;
@@ -62,14 +81,22 @@ router.get('/enclousures', '/:id', async (ctx) => {
 
 
 // Update an enclousure
-router.put('/enclousures', '/:id/update',  async (ctx) => {
+router.put('/enclousures', '/:id',  async (ctx) => {
   try {
-    const enclousure = await enclousures.findByPk(ctx.params.id);
+    const session = await ctx.orm.sessions.findByPk(ctx.session.sessionid);
+    const userid = session.userid;
+    const enclousure = await ctx.orm.enclousures.findByPk(ctx.params.id);
     console.log(enclousure);
     if (!enclousure) {
-      ctx.status = 404;
-      ctx.body = { error: 'Enclousure not found' };
-    } else {
+        ctx.status = 404;
+        ctx.body = { error: 'Enclousure not found' };
+    } 
+    else {
+      if(userid!=enclousure.ownerid){
+        ctx.status = 401;
+        ctx.body = { error: 'enclousure doesnt belong to user' };
+      }
+      else{
       const { name, address, district, phonenumber, socialmedia, email } = ctx.request.body;
       await enclousure.update({
         name,
@@ -81,7 +108,8 @@ router.put('/enclousures', '/:id/update',  async (ctx) => {
       });
       ctx.body = enclousure;
     }
-  } catch (error) {
+  }
+} catch (error) {
     ctx.status = 500;
     ctx.body = { error: 'Failed to update enclousure' };
   }
@@ -90,18 +118,26 @@ router.put('/enclousures', '/:id/update',  async (ctx) => {
 
 
 // Delete an enclousure
-router.delete('/enclousures', '/:id/delete', async (ctx) => {
+router.delete('/enclousures', '/:id', async (ctx) => {
   try {
+    const session = await ctx.orm.sessions.findByPk(ctx.session.sessionid);
+    const userid = session.userid;
     const enclousure = await enclousures.findByPk(ctx.params.id);
     console.log(enclousure);
     if (!enclousure) {
-      ctx.status = 404;
-      ctx.body = { error: 'Enclousure not found' };
+        ctx.status = 404;
+        ctx.body = { error: 'Enclousure not found for user' };
     } else {
-      await enclousure.destroy();
-      ctx.body = { message: 'Enclousure deleted successfully' };
-    }
-  } catch (error) {
+      if(userid!=enclousure.ownerid){
+        ctx.status = 401;
+        ctx.body = { error: 'enclousure doesnt belong to user' };
+      }
+      else{
+        await enclousure.destroy();
+        ctx.body = { message: 'Enclousure deleted successfully' };
+      }
+  }
+} catch (error) {
     ctx.status = 500;
     ctx.body = { error: 'Failed to delete enclousure' };
   }
