@@ -1,10 +1,10 @@
 module.exports = async (ctx, next) => {
-    if (!ctx.session.sessionid) {
+    if (!ctx.headers.authorization) {
         ctx.throw(401,"You have to Log In");
     }
 
     try {
-        const session = await ctx.orm.sessions.findByPk(ctx.session.sessionid);
+        const session = await ctx.orm.sessions.findByPk(ctx.headers.authorization);
         if (session) {
             await next();
         } else {
