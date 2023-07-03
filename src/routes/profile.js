@@ -12,7 +12,8 @@ const bcrypt = require('bcrypt');
 
 router.get('/profile', '/info', async (ctx) => {
   try {
-    const session = await ctx.orm.sessions.findByPk(ctx.headers.authorization);
+    const sessionid = ctx.session.sessionid || ctx.headers.authorization;
+    const session = await ctx.orm.sessions.findByPk(sessionid);
     const userid = session.userid;
     const user = await ctx.orm.users.findByPk(userid);
     let userinfo;
