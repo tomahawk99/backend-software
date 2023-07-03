@@ -24,6 +24,9 @@ module.exports = {
       type: {
         type: Sequelize.STRING
       },
+      phonenumber: {
+        type: Sequelize.STRING
+      },
       createdat: {
         allowNull: false,
         type: Sequelize.DATE

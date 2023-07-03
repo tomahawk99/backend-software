@@ -51,6 +51,7 @@ router.post('/auth', '/signup', async (ctx) => {
         const user = await ctx.orm.users.create({
             name: ctx.request.body.name,
             lastname: ctx.request.body.lastname,
+            phonenumber: ctx.request.body.phonenumber,
             password: hashPassword,
             email: ctx.request.body.email,
             type: ctx.request.body.type
