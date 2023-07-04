@@ -116,7 +116,10 @@ router.put('/enclousures', '/:id',  async (ctx) => {
         district,
         phonenumber,
         socialmedia,
-        email
+        email,
+        maxplayers,
+        manager,
+        price
       });
       ctx.body = enclousure;
     }
