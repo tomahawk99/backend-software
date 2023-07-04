@@ -23,6 +23,15 @@ router.post('/enclousures', '/', async (ctx) => {
       socialmedia: ctx.request.body.socialmedia,
       email: ctx.request.body.email
     });
+    const unselected = ctx.request.body.unselected;
+    unselected.forEach(element => {
+      console.log(element);
+      let availability = ctx.orm.availabilities.create({
+        fieldid: enclousure.id,
+        available: true,
+        hour: element
+      })
+    });
     console.log(enclousure);
     ctx.body = enclousure;
   } catch (error) {

@@ -1,8 +1,36 @@
 const Router = require('koa-router');
 const router = new Router();
-const {  users, bookings } = require('../models');
 
 // Get all bookings
+router.get('/player', '/getenclousures', async (ctx) => {
+  try {
+      const enclosureList = await ctx.orm.enclousures.findAll();
+      console.log(enclosureList)
+      ctx.body = enclosureList;
+  } catch (error) {
+      console.error(error);
+      ctx.status = 500;
+      ctx.body = { error: 'Failed to get enclousures' };
+  }
+});
+
+router.get('/player', '/getavailabilities/:id ', async (ctx) => {
+  try {
+      const availabilitiesList = await ctx.orm.availabilities.findAll({
+        where: {
+            fieldid: ctx.params.id
+        }
+    });
+      console.log(availabilitiesList)
+      ctx.body = availabilitiesList;
+  } catch (error) {
+      console.error(error);
+      ctx.status = 500;
+      ctx.body = { error: 'Failed to get availabilities' };
+  }
+});
+
+
 router.get('/player', '/getbookings', async (ctx) => {
     try {
         const session = await ctx.orm.sessions.findByPk(ctx.session.sessionid);
@@ -26,7 +54,7 @@ router.post('/player', '/booking', async (ctx) => {
     try {
     const session = await ctx.orm.sessions.findByPk(ctx.session.sessionid);
     const userid = session.userid;
-      const booking = await bookings.create({
+      const booking = await ctx.orm.bookings.create({
         active: true,
         playerid: userid,
         availabilityid: ctx.request.body.availabilityid,
@@ -44,7 +72,7 @@ router.get('/player', '/booking/:id', async (ctx) => {
     try {
         const session = await ctx.orm.sessions.findByPk(ctx.session.sessionid);
         const userid = session.userid;
-        const booking = await bookings.findByPk(ctx.params.id);
+        const booking = await ctx.orm.bookings.findByPk(ctx.params.id);
 
       if (!booking) {
         ctx.status = 404;
@@ -56,7 +84,7 @@ router.get('/player', '/booking/:id', async (ctx) => {
             ctx.status = 201;
         }
         else{
-            ctx.status = 404;
+            ctx.status = 401;
             ctx.body = { error: 'wrong booking' };
         }
       }
@@ -72,7 +100,7 @@ router.put('/player', '/booking/:id',  async (ctx) => {
     try {
         const session = await ctx.orm.sessions.findByPk(ctx.session.sessionid);
         const userid = session.userid;
-        const booking = await bookings.findByPk(ctx.params.id);
+        const booking = await ctx.orm.bookings.findByPk(ctx.params.id);
         if (!booking) {
             ctx.status = 404;
             ctx.body = { error: 'booking not found' };
@@ -87,7 +115,7 @@ router.put('/player', '/booking/:id',  async (ctx) => {
                 ctx.status = 201;
             }
             else{
-                ctx.status = 404;
+                ctx.status = 401;
                 ctx.body = { error: 'wrong booking' };
             }
       }
@@ -103,7 +131,7 @@ router.delete('/player', '/booking/:id', async (ctx) => {
     try {
         const session = await ctx.orm.sessions.findByPk(ctx.session.sessionid);
         const userid = session.userid;
-        const booking = await bookings.findByPk(ctx.params.id);
+        const booking = await ctx.orm.bookings.findByPk(ctx.params.id);
         if (!booking) {
             ctx.status = 404;
             ctx.body = { error: 'booking not found' };
@@ -115,7 +143,7 @@ router.delete('/player', '/booking/:id', async (ctx) => {
                 ctx.status = 201;
             }
             else{
-                ctx.status = 404;
+                ctx.status = 401;
                 ctx.body = { error: 'wrong booking' };
             }
         }   

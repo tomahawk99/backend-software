@@ -23,7 +23,8 @@ module.exports = (sequelize, DataTypes) => {
   availabilities.init({
     timestart: DataTypes.DATE,
     timeend: DataTypes.DATE,
-    available: DataTypes.BOOLEAN
+    available: DataTypes.BOOLEAN,
+    hour: DataTypes.INTEGER,
   }, {
     sequelize,
     modelName: 'availabilities',

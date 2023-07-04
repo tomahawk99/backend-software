@@ -9,6 +9,7 @@ const bookings = require('./routes/bookings.js');
 const profile = require('./routes/profile.js');
 const owner = require('./routes/owner.js');
 const player = require('./routes/player.js');
+const ratings = require('./routes/ratings.js');
 
 const auth_middle = require('./middlewares/auth.js');
 const auth = require('./routes/auth.js');
@@ -23,6 +24,8 @@ router.use('/auth',auth.routes());
 router.use('/profile', auth_middle, profile.routes());
 router.use('/owner', auth_middle, owner.routes());
 router.use('/player', auth_middle, player.routes());
+router.use('/ratings', auth_middle, ratings.routes());
+
 
 router.use('/users', auth_middle, users.routes());
 router.use('/enclousures', auth_middle, enclousures.routes());
