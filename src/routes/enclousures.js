@@ -68,8 +68,6 @@ router.get('/enclousures', '/', async (ctx) => {
 // Get a single enclousure by ID
 router.get('/enclousures', '/:id', async (ctx) => {
   try {
-    const session = await ctx.orm.sessions.findByPk(ctx.session.sessionid);
-    const userid = session.userid;
     const enclousure = await ctx.orm.enclousures.findByPk(ctx.params.id);
     console.log(enclousure);
     if (!enclousure) {
@@ -77,13 +75,7 @@ router.get('/enclousures', '/:id', async (ctx) => {
         ctx.body = { error: 'Enclousure not found for user' };
     } 
     else {
-      if(userid!=enclousure.ownerid){
-        ctx.status = 401;
-        ctx.body = { error: 'enclousure doesnt belong to user' };
-      }
-      else{
-        ctx.body = enclousure;
-      }
+      ctx.body = enclousure;
     }
   } catch (error) {
     ctx.status = 500;
