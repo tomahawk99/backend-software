@@ -21,6 +21,9 @@ router.post('/enclousures', '/', async (ctx) => {
       district: ctx.request.body.district,
       phonenumber:  ctx.request.body.phonenumber,
       socialmedia: ctx.request.body.socialmedia,
+      maxplayers: ctx.request.body.maxplayers,
+      manager: ctx.request.body.manager,
+      price: ctx.request.body.price,
       email: ctx.request.body.email
     });
     const unselected = ctx.request.body.unselected;

@@ -26,7 +26,10 @@ module.exports = (sequelize, DataTypes) => {
     district: DataTypes.STRING,
     phonenumber: DataTypes.STRING,
     socialmedia: DataTypes.STRING,
-    email: DataTypes.STRING
+    email: DataTypes.STRING,
+    maxplayers: DataTypes.INTEGER,
+    manager: DataTypes.STRING,
+    price: DataTypes.INTEGER,
   }, {
     sequelize,
     modelName: 'enclousures',
