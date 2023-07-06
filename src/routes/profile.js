@@ -61,7 +61,8 @@ router.put('/profile', '/update',  async (ctx) => {
           lastname,
           password,
           email,
-          type
+          type,
+          phonenumber,
         });
         ctx.body = user;
     }

@@ -26,7 +26,8 @@ module.exports = (sequelize, DataTypes) => {
     }
   }
   bookings.init({
-    active: DataTypes.BOOLEAN
+    active: DataTypes.BOOLEAN,
+    date: DataTypes.DATE,
   }, {
     sequelize,
     modelName: 'bookings',
