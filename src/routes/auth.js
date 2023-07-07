@@ -10,11 +10,11 @@ router.post('/auth',"/login", async (ctx) => {
     try {
         const user = await ctx.orm.users.findOne({
             where: {
-              email: {
-                [Op.eq]: ctx.request.body.email,
-              },
+                email: {
+                    [Op.eq]: ctx.request.body.email,
+                },
             },
-          });
+        });
         if (user) {
             const compare = await bcrypt.compare(ctx.request.body.password, user.password);
             if (compare) {
