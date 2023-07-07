@@ -36,6 +36,18 @@ router.get('/profile', '/info', async (ctx) => {
         },
       );
     }
+    else if (user.type=="admin"){
+      const playersCount = await ctx.orm.users.count({ where: { type: "player" } });
+      const ownersCount = await ctx.orm.users.count({ where: { type: "owner" } });
+      const fieldsCount = await ctx.orm.fields.count();
+
+      userinfo = {
+        "players": playersCount,
+        "owners": ownersCount,
+        "fields": fieldsCount
+      }
+    }
+
     ctx.body = userinfo;
   } catch (error) {
     console.log(error);
