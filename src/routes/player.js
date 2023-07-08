@@ -207,36 +207,36 @@ router.put('/player', '/booking/:id',  async (ctx) => {
 
     // Revisar
 //DETELE
+//DETELE
 router.delete('/player', '/booking/:id', async (ctx) => {
-    try {
-        const session = await ctx.orm.sessions.findByPk(ctx.session.sessionid);
-        const userid = session.userid;
-        const booking = await ctx.orm.bookings.findByPk(ctx.params.id);
-        
-        if (!booking) {
-            ctx.status = 404;
-            ctx.body = { error: 'booking not found' };
-        }     
-        else {
-            if (booking.playerid == userid){
-                const availability = await ctx.orm.availabilities.findByPk(booking.availabilityid)
-                await availability.update({
-                  available: true
-                })
-                await booking.destroy();
-                ctx.body = { message: 'booking deleted' };
-                ctx.status = 201;
-            }
-            else{
-                ctx.status = 401;
-                ctx.body = { error: 'wrong booking' };
-            }
-        }   
-    } catch (error) {
-     console.error(error)
-      ctx.status = 500;
-      ctx.body = { error: 'Error' };
-    }
-  });
+  try {
+      const session = await ctx.orm.sessions.findByPk(ctx.session.sessionid);
+      const userid = session.userid;
+      const booking = await ctx.orm.bookings.findByPk(ctx.params.id);
+      if (!booking) {
+          ctx.status = 404;
+          ctx.body = { error: 'booking not found' };
+      }
+      else {
+          if (booking.playerid == userid){
+              const availability = await ctx.orm.availabilities.findByPk(booking.availabilityid)
+              await availability.update({
+                available: true
+              })
+              await booking.destroy();
+              ctx.body = { message: 'booking deleted' };
+              ctx.status = 201;
+          }
+          else{
+              ctx.status = 401;
+              ctx.body = { error: 'wrong booking' };
+          }
+      }
+  } catch (error) {
+   console.error(error)
+    ctx.status = 500;
+    ctx.body = { error: 'Error' };
+  }
+});
 
 module.exports = router;

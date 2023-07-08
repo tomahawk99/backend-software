@@ -15,7 +15,6 @@ router.post('/enclousures', '/', async (ctx) => {
     console.log(owner);
     ownerid = owner.id;
     const enclousure = await ctx.orm.enclousures.create({
-
       name: ctx.request.body.name,
       ownerid: ownerid,
       address: ctx.request.body.address,
@@ -27,7 +26,6 @@ router.post('/enclousures', '/', async (ctx) => {
       price: ctx.request.body.price,
       email: ctx.request.body.email
     });
-
     const unselected = ctx.request.body.unselected;
     unselected.forEach(element => {
       console.log(element);
@@ -38,7 +36,6 @@ router.post('/enclousures', '/', async (ctx) => {
       })
     });
     console.log(enclousure);
-
     ctx.body = enclousure;
   } catch (error) {
     ctx.status = 500;
@@ -46,8 +43,30 @@ router.post('/enclousures', '/', async (ctx) => {
   }
 });
 
+// Get all enclousures for all Id
+router.get('/enclousures', '/all', async (ctx) => {
+  const session = await ctx.orm.sessions.findByPk(ctx.session.sessionid);
+  const userid = session.userid;
+  const user = await ctx.orm.users.findByPk(userid);
+  if (user.type=="player"){
+    try {
+      const usersInfo = await ctx.orm.enclousures.findAll();
+      console.log(usersInfo)
+      ctx.body = usersInfo;
+    } catch (error) {
+      console.log(error);
+      ctx.status = 500;
+      ctx.body = { error: 'Failed to retrieve users' };
+    }
+  }
+  else{
+    ctx.status = 403;
+    ctx.body = { error: 'Access Denied' };
+  }
+});
 
-// Get all enclousures
+
+// Get all enclousures for specific Id
 router.get('/enclousures', '/', async (ctx) => {
   try {
     const session = await ctx.orm.sessions.findByPk(ctx.session.sessionid);
@@ -59,7 +78,6 @@ router.get('/enclousures', '/', async (ctx) => {
         }
     });
     console.log(enclousures)
-
     ctx.body = enclousures;
   } 
   catch (error) {
@@ -74,7 +92,6 @@ router.get('/enclousures', '/:id', async (ctx) => {
   try {
     const enclousure = await ctx.orm.enclousures.findByPk(ctx.params.id);
     console.log(enclousure);
-
     if (!enclousure) {
         ctx.status = 404;
         ctx.body = { error: 'Enclousure not found for user' };
@@ -96,7 +113,6 @@ router.put('/enclousures', '/:id',  async (ctx) => {
     const userid = session.userid;
     const enclousure = await ctx.orm.enclousures.findByPk(ctx.params.id);
     console.log(enclousure);
-
     if (!enclousure) {
         ctx.status = 404;
         ctx.body = { error: 'Enclousure not found' };
@@ -107,18 +123,44 @@ router.put('/enclousures', '/:id',  async (ctx) => {
         ctx.body = { error: 'enclousure doesnt belong to user' };
       }
       else{
-      const { name, address, district, phonenumber, socialmedia, email } = ctx.request.body;
-      await enclousure.update({
-        name,
-        address,
-        district,
-        phonenumber,
-        socialmedia,
-        email,
-        maxplayers,
-        manager,
-        price
-      });
+  
+      const { name, address, district, maxplayers, manager, phonenumber, price } = ctx.request.body;
+      const updatedProperties = {
+        name: enclousure.name,
+        address: enclousure.addres,
+        district: enclousure.district,
+        maxplayers: enclousure.maxplayers,
+        manager: enclousure.manager,
+        phonenumber: enclousure.phonenumber,
+        price: enclousure.price,
+      };
+
+      if (name!="") {
+        updatedProperties.name = name;
+      }
+
+      if (address!="") {
+        updatedProperties.address = address;
+      }
+      if (district!="") {
+        updatedProperties.district = district;
+      }
+
+      if (maxplayers!="") {
+        updatedProperties.maxplayers = maxplayers;
+      }
+      if (manager!="") {
+        updatedProperties.manager = manager;
+      }
+      if (phonenumber!="") {
+        updatedProperties.phonenumber = phonenumber;
+      }
+      if (price!="") {
+        updatedProperties.price = price;
+      }
+
+      await enclousure.update(updatedProperties);
+
       ctx.body = enclousure;
     }
   }

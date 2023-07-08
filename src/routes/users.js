@@ -36,7 +36,6 @@ router.get('user.show', '/profile', async (ctx) => {
       );
     }
     ctx.body = userinfo;
-
   } catch (error) {
     console.log(error);
     ctx.throw(404);
@@ -46,13 +45,64 @@ router.get('user.show', '/profile', async (ctx) => {
 
 // Get all users
 //solo para admin
-router.get('/users', '/', async (ctx) => {
+router.get('/users', '/playersadmin', async (ctx) => {
   const session = await ctx.orm.sessions.findByPk(ctx.session.sessionid);
   const userid = session.userid;
   const user = await ctx.orm.users.findByPk(userid);
   if (user.type=="admin"){
     try {
-      const usersInfo = await users.findAll();
+      const usersInfo = await users.findAll({
+        where: {
+          type: "player"
+      }
+      });
+      console.log(usersInfo)
+      ctx.body = usersInfo;
+    } catch (error) {
+      console.log(error);
+      ctx.status = 500;
+      ctx.body = { error: 'Failed to retrieve users' };
+    }
+  }
+  else{
+    ctx.status = 403;
+    ctx.body = { error: 'Access Denied' };
+  }
+});
+
+router.get('/users', '/companysadmin', async (ctx) => {
+  const session = await ctx.orm.sessions.findByPk(ctx.session.sessionid);
+  const userid = session.userid;
+  const user = await ctx.orm.users.findByPk(userid);
+  if (user.type=="admin"){
+    try {
+      const usersInfo = await users.findAll({
+        where: {
+          type: "owner"
+      }
+      });
+      console.log(usersInfo)
+      ctx.body = usersInfo;
+    } catch (error) {
+      console.log(error);
+      ctx.status = 500;
+      ctx.body = { error: 'Failed to retrieve users' };
+    }
+  }
+  else{
+    ctx.status = 403;
+    ctx.body = { error: 'Access Denied' };
+  }
+});
+
+
+router.get('/users', '/fieldsadmin', async (ctx) => {
+  const session = await ctx.orm.sessions.findByPk(ctx.session.sessionid);
+  const userid = session.userid;
+  const user = await ctx.orm.users.findByPk(userid);
+  if (user.type=="admin"){
+    try {
+      const usersInfo = await ctx.orm.enclousures.findAll();
       console.log(usersInfo)
       ctx.body = usersInfo;
     } catch (error) {
@@ -72,7 +122,6 @@ router.get('/users', '/:id', async (ctx) => {
   try {
     const user = await users.findByPk(ctx.params.id);
     console.log(user);
-
     if (!user) {
       ctx.status = 404;
       ctx.body = { error: 'User not found' };
@@ -91,7 +140,6 @@ router.put('/users', '/:id/update',  async (ctx) => {
   try {
     const user = await users.findByPk(ctx.params.id);
     console.log(user);
-
     if (!user) {
       ctx.status = 404;
       ctx.body = { error: 'User not found' };
@@ -118,7 +166,6 @@ router.delete('/users', '/:id/delete', async (ctx) => {
   try {
     const user = await users.findByPk(ctx.params.id);
     console.log(user);
-
     if (!user) {
       ctx.status = 404;
       ctx.body = { error: 'User not found' };
