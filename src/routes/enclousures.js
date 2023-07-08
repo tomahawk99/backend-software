@@ -26,7 +26,7 @@ router.post('/enclousures', '/', async (ctx) => {
       price: ctx.request.body.price,
       email: ctx.request.body.email
     });
-    const unselected = ctx.request.body.unselected;
+    const unselected = [8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23];
     unselected.forEach(element => {
       console.log(element);
       let availability = ctx.orm.availabilities.create({
