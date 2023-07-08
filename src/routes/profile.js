@@ -39,7 +39,7 @@ router.get('/profile', '/info', async (ctx) => {
     else if (user.type=="admin"){
       const playersCount = await ctx.orm.users.count({ where: { type: "player" } });
       const ownersCount = await ctx.orm.users.count({ where: { type: "owner" } });
-      const fieldsCount = await ctx.orm.fields.count();
+      const fieldsCount = await ctx.orm.enclousures.count();
 
       userinfo = {
         "players": playersCount,
