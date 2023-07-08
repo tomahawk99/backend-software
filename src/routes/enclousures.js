@@ -15,6 +15,7 @@ router.post('/enclousures', '/', async (ctx) => {
     console.log(owner);
     ownerid = owner.id;
     const enclousure = await ctx.orm.enclousures.create({
+
       name: ctx.request.body.name,
       ownerid: ownerid,
       address: ctx.request.body.address,
@@ -26,6 +27,7 @@ router.post('/enclousures', '/', async (ctx) => {
       price: ctx.request.body.price,
       email: ctx.request.body.email
     });
+
     const unselected = ctx.request.body.unselected;
     unselected.forEach(element => {
       console.log(element);
@@ -36,6 +38,7 @@ router.post('/enclousures', '/', async (ctx) => {
       })
     });
     console.log(enclousure);
+
     ctx.body = enclousure;
   } catch (error) {
     ctx.status = 500;
@@ -56,6 +59,7 @@ router.get('/enclousures', '/', async (ctx) => {
         }
     });
     console.log(enclousures)
+
     ctx.body = enclousures;
   } 
   catch (error) {
@@ -70,6 +74,7 @@ router.get('/enclousures', '/:id', async (ctx) => {
   try {
     const enclousure = await ctx.orm.enclousures.findByPk(ctx.params.id);
     console.log(enclousure);
+
     if (!enclousure) {
         ctx.status = 404;
         ctx.body = { error: 'Enclousure not found for user' };
@@ -91,6 +96,7 @@ router.put('/enclousures', '/:id',  async (ctx) => {
     const userid = session.userid;
     const enclousure = await ctx.orm.enclousures.findByPk(ctx.params.id);
     console.log(enclousure);
+
     if (!enclousure) {
         ctx.status = 404;
         ctx.body = { error: 'Enclousure not found' };

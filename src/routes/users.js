@@ -36,6 +36,7 @@ router.get('user.show', '/profile', async (ctx) => {
       );
     }
     ctx.body = userinfo;
+
   } catch (error) {
     console.log(error);
     ctx.throw(404);
@@ -71,6 +72,7 @@ router.get('/users', '/:id', async (ctx) => {
   try {
     const user = await users.findByPk(ctx.params.id);
     console.log(user);
+
     if (!user) {
       ctx.status = 404;
       ctx.body = { error: 'User not found' };
@@ -89,6 +91,7 @@ router.put('/users', '/:id/update',  async (ctx) => {
   try {
     const user = await users.findByPk(ctx.params.id);
     console.log(user);
+
     if (!user) {
       ctx.status = 404;
       ctx.body = { error: 'User not found' };
@@ -115,6 +118,7 @@ router.delete('/users', '/:id/delete', async (ctx) => {
   try {
     const user = await users.findByPk(ctx.params.id);
     console.log(user);
+
     if (!user) {
       ctx.status = 404;
       ctx.body = { error: 'User not found' };

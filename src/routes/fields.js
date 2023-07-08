@@ -3,7 +3,6 @@ const router = new Router();
 
 // Get all fields
 router.get('/fields', '/', async (ctx) => {
-    console.log("aca");
     try {
       const session = await ctx.orm.sessions.findByPk(ctx.session.sessionid);
       const userid = session.userid;
@@ -13,6 +12,7 @@ router.get('/fields', '/', async (ctx) => {
           }
       });
       console.log(fields)
+
       ctx.body = fields;
   } 
   catch (error) {
@@ -41,6 +41,7 @@ router.post('/fields', '/', async (ctx) => {
         minplayers: ctx.request.body.minplayers,
         playeramount: ctx.request.body.playeramount,
         ownerid : userid,
+
       });
       ctx.body = field;
     } catch (error) {
