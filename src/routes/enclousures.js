@@ -27,14 +27,14 @@ router.post('/enclousures', '/', async (ctx) => {
       email: ctx.request.body.email
     });
     const unselected = [8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23];
-    unselected.forEach(element => {
+    for (const element of unselected) {
       console.log(element);
-      let availability = ctx.orm.availabilities.create({
+      let availability = await ctx.orm.availabilities.create({
         fieldid: enclousure.id,
         available: true,
         hour: element
       })
-    });
+    };
     console.log(enclousure);
     ctx.body = enclousure;
   } catch (error) {
