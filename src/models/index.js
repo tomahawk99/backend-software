@@ -9,12 +9,38 @@ const env = process.env.NODE_ENV || 'development';
 const config = require(__dirname + '/../config/config.js')[env];
 const db = {};
 
+/*
 let sequelize;
 if (config.use_env_variable) {
   sequelize = new Sequelize(process.env[config.use_env_variable], config);
 } else {
   sequelize = new Sequelize(config.database, config.username, config.password, config);
 }
+*/
+
+const port = (process.env.NODE_ENV === 'production') ? process.env.PGPORT : 5342;
+
+
+const sequelize1 = new Sequelize(process.env.DATABASE_URL,
+  {
+  //ssl: true,
+  port: port,
+  define:{
+    timestamps: false
+  },
+  dialect: process.env.DB_DIALECT || 'postgres',
+  // https://stackoverflow.com/questions/61350186/how-to-solve-the-database-connection-error-sequelizeconnectionerror
+  // dialectOptions: {
+  //   ssl: {
+  //     require: true,
+  //     rejectUnauthorized: false,
+  //   },
+  // },
+});
+
+const sequelize2 = new Sequelize(config);
+
+const sequelize = (process.env.NODE_ENV === 'production') ? sequelize1 : sequelize2;
 
 fs
   .readdirSync(__dirname)

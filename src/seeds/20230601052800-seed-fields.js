@@ -3,30 +3,30 @@
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up (queryInterface, Sequelize) {
-    return queryInterface.bulkInsert('Fields',[
+    return queryInterface.bulkInsert('fields',[
       {
         id: 13,
-        enclousureId: 15,
+        enclousureid: 15,
         number: 1,
-        maxPlayers: 20,
-        minPlayers: 10,
-        playerAmount: 0,
-        createdAt: new Date(),
-        updatedAt: new Date()
+        maxplayers: 20,
+        minplayers: 10,
+        playeramount: 0,
+        createdat: new Date(),
+        updatedat: new Date()
       },
       {
         id: 14,
-        enclousureId: 15,
+        enclousureid: 15,
         number: 2,
-        maxPlayers: 20,
-        minPlayers: 10,
-        playerAmount: 0,
-        createdAt: new Date(),
-        updatedAt: new Date()
+        maxplayers: 20,
+        minplayers: 10,
+        playeramount: 0,
+        createdat: new Date(),
+        updatedat: new Date()
       },
     ])
   },
 
-  down: (queryInterface) => queryInterface.bulkDelete('Fields', null, {}),
+  down: (queryInterface) => queryInterface.bulkDelete('fields', null, {}),
 
 };

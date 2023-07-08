@@ -6,43 +6,73 @@ const Router = require('koa-router');
 
 const router = new Router();
 
-const {Users} = require('../models');
+const {users} = require('../models');
+const bcrypt = require('bcrypt');
 
 
-
-// Create a user
-router.post('/users', '/create', async (ctx) => {
+router.get('user.show', '/profile', async (ctx) => {
   try {
-    const user = await Users.create({
-      name: ctx.request.body.name,
-      lastName: ctx.request.body.lastName,
-      password: ctx.request.body.password,
-      email: ctx.request.body.email,
-      type: ctx.request.body.type
-    });
-    ctx.body = user;
+    const session = await ctx.orm.sessions.findByPk(ctx.session.sessionid);
+    const userid = session.userid;
+    const user = await ctx.orm.users.findByPk(userid);
+    let userinfo;
+    console.log(user.type);
+    if (user.type=="player"){
+      userinfo = await ctx.orm.users.findByPk(userid,
+        {
+          include: [
+            { model: ctx.orm.bookings },
+          ],
+        },
+      );
+    }
+    else if (user.type=="owner"){
+      userinfo = await ctx.orm.users.findByPk(userid,
+        {
+          include: [
+            { model: ctx.orm.enclousures }
+          ],
+        },
+      );
+    }
+    ctx.body = userinfo;
+
   } catch (error) {
-    ctx.status = 500;
-    ctx.body = { error: 'Failed to create user' };
+    console.log(error);
+    ctx.throw(404);
   }
 });
 
 
 // Get all users
+//solo para admin
 router.get('/users', '/', async (ctx) => {
-  try {
-    const users = await Users.findAll();
-    ctx.body = users;
-  } catch (error) {
-    ctx.status = 500;
-    ctx.body = { error: 'Failed to retrieve enclousures' };
+  const session = await ctx.orm.sessions.findByPk(ctx.session.sessionid);
+  const userid = session.userid;
+  const user = await ctx.orm.users.findByPk(userid);
+  if (user.type=="admin"){
+    try {
+      const usersInfo = await users.findAll();
+      console.log(usersInfo)
+      ctx.body = usersInfo;
+    } catch (error) {
+      console.log(error);
+      ctx.status = 500;
+      ctx.body = { error: 'Failed to retrieve users' };
+    }
+  }
+  else{
+    ctx.status = 403;
+    ctx.body = { error: 'Access Denied' };
   }
 });
 
 // Get a single user by ID
 router.get('/users', '/:id', async (ctx) => {
   try {
-    const user = await Users.findByPk(ctx.params.id);
+    const user = await users.findByPk(ctx.params.id);
+    console.log(user);
+
     if (!user) {
       ctx.status = 404;
       ctx.body = { error: 'User not found' };
@@ -59,15 +89,17 @@ router.get('/users', '/:id', async (ctx) => {
 // Update a user
 router.put('/users', '/:id/update',  async (ctx) => {
   try {
-    const user = await Users.findByPk(ctx.params.id);
+    const user = await users.findByPk(ctx.params.id);
+    console.log(user);
+
     if (!user) {
       ctx.status = 404;
       ctx.body = { error: 'User not found' };
     } else {
-      const { name, lastName, password, email, type } = ctx.request.body;
+      const { name, lastname, password, email, type } = ctx.request.body;
       await user.update({
         name,
-        lastName,
+        lastname,
         password,
         email,
         type
@@ -84,7 +116,9 @@ router.put('/users', '/:id/update',  async (ctx) => {
 // Delete a user
 router.delete('/users', '/:id/delete', async (ctx) => {
   try {
-    const user = await Users.findByPk(ctx.params.id);
+    const user = await users.findByPk(ctx.params.id);
+    console.log(user);
+
     if (!user) {
       ctx.status = 404;
       ctx.body = { error: 'User not found' };

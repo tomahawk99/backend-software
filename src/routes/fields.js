@@ -1,33 +1,47 @@
 const Router = require('koa-router');
 const router = new Router();
-const { Enclousures, Users, Fields } = require('../models');
 
-// Get all Fields
+// Get all fields
 router.get('/fields', '/', async (ctx) => {
     try {
-      const fields = await Fields.findAll();
-   
+      const session = await ctx.orm.sessions.findByPk(ctx.session.sessionid);
+      const userid = session.userid;
+      const fields = await ctx.orm.fields.findAll({
+          where: {
+              ownerid: userid
+          }
+      });
+      console.log(fields)
+
       ctx.body = fields;
-    } catch (error) {
+  } 
+  catch (error) {
       ctx.status = 500;
-      ctx.body = { error: 'Failed get fields' };
-    }
+      ctx.body = { error: 'Failed to retrieve fields of owner' };
+  }
   });
 
 
 // Create a field
-router.post('/fields', '/create', async (ctx) => {
+router.post('/fields', '/', async (ctx) => {
     try {
-      // const ownerId = ctx.state.user.id;
-      const owner = await Users.findByPk(1); 
-
-      ownerId = owner.id;
-      const field = await Fields.create({
+      // const ownerid = ctx.state.user.id;
+      const session = await ctx.orm.sessions.findByPk(ctx.session.sessionid);
+      const userid = session.userid;
+//testing
+      const user = await ctx.orm.users.findByPk(userid);
+      console.log(user.name);
+//testing
+      //sin check de tipo de usuario
+      const field = await ctx.orm.fields.create({
+        name: ctx.request.body.name,
         number: ctx.request.body.number,
-        enclousureId: ctx.request.body.enclousureId,
-        maxPlayers: ctx.request.body.maxPlayers,
-        minPlayers: ctx.request.body.minPlayers,
-        playerAmount: ctx.request.body.playerAmount,
+        enclousureid: ctx.request.body.enclousureid,
+        maxplayers: ctx.request.body.maxplayers,
+        minplayers: ctx.request.body.minplayers,
+        playeramount: ctx.request.body.playeramount,
+        ownerid : userid,
+
       });
       ctx.body = field;
     } catch (error) {
@@ -39,12 +53,20 @@ router.post('/fields', '/create', async (ctx) => {
   // Get one field
 router.get('/fields', '/:id', async (ctx) => {
     try {
-      const field = await Fields.findByPk(ctx.params.id);
+      //const session = await ctx.orm.sessions.findByPk(ctx.session.sessionid);
+      //const userid = session.userid;
+      const field = await ctx.orm.fields.findByPk(ctx.params.id);
       if (!field) {
         ctx.status = 404;
         ctx.body = { error: 'field not found' };
       } else {
-        ctx.body = field;
+        // if (field.ownerid != userid) {
+        //   ctx.status = 401;
+        //   ctx.body = { error: 'field doesnt belong to user' };
+        // }
+        // else{
+          ctx.body = field;
+        //}
       }
     } catch (error) {
         console.error(error);
@@ -54,22 +76,32 @@ router.get('/fields', '/:id', async (ctx) => {
   });
 
   // Update 
-router.put('/fields', '/:id/update',  async (ctx) => {
+router.put('/fields', '/:id',  async (ctx) => {
     try {
-      const field = await Fields.findByPk(ctx.params.id);
+      const session = await ctx.orm.sessions.findByPk(ctx.session.sessionid);
+      const userid = session.userid;
+      const field = await ctx.orm.fields.findByPk(ctx.params.id);
       if (!field) {
         ctx.status = 404;
         ctx.body = { error: 'Field not found' };
-      } else {
-        const { number, EnclousureId, maxPlayers, minPlayers, playerAmount } = ctx.request.body;
-        await field.update({
-            number,
-            EnclousureId,
-            maxPlayers,
-            minPlayers,
-            playerAmount
-        });
-        ctx.body = field;
+      } 
+      else {
+        if (field.ownerid != userid) {
+           ctx.status = 401;
+           ctx.body = { error: 'field doesnt belong to user' };
+        }
+        else{
+          const { name, number, enclousureid, maxplayers, minplayers, playeramount } = ctx.request.body;
+          await field.update({
+              number,
+              name,
+              enclousureid,
+              maxplayers,
+              minplayers,
+              playeramount
+          });
+          ctx.body = field;
+        }
       }
     } catch (error) {
         console.error(error);
@@ -79,15 +111,23 @@ router.put('/fields', '/:id/update',  async (ctx) => {
   });
 
 //DETELE
-router.delete('/fields', '/:id/delete', async (ctx) => {
+router.delete('/fields', '/:id', async (ctx) => {
     try {
-      const field = await Fields.findByPk(ctx.params.id);
+      const session = await ctx.orm.sessions.findByPk(ctx.session.sessionid);
+      const userid = session.userid;
+      const field = await ctx.orm.fields.findByPk(ctx.params.id);
       if (!field) {
         ctx.status = 404;
         ctx.body = { error: 'Field not found' };
       } else {
-        await field.destroy();
-        ctx.body = { message: 'Field deleted' };
+        if (field.ownerid != userid) {
+          ctx.status = 401;
+          ctx.body = { error: 'field doesnt belong to user' };
+       }
+       else{
+          await field.destroy();
+          ctx.body = { message: 'Field deleted' };
+       }
       }
     } catch (error) {
      console.error(error)

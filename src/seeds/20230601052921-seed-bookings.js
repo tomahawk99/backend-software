@@ -14,6 +14,6 @@ module.exports = {
     */
   },
 
-  down: (queryInterface) => queryInterface.bulkDelete('Bookings', null, {}),
+  down: (queryInterface) => queryInterface.bulkDelete('bookings', null, {}),
 
 };

@@ -2,16 +2,16 @@
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
-    await queryInterface.createTable('Availabilities', {
+    await queryInterface.createTable('availabilities', {
       id: {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
         type: Sequelize.INTEGER
       },
-      fieldId: {
+      fieldid: {
         type: Sequelize.INTEGER,
-        references: {model: 'Fields', key: 'id'}
+        references: {model: 'fields', key: 'id'}
       },
       timestart: {
         type: Sequelize.DATE
@@ -22,17 +22,17 @@ module.exports = {
       available: {
         type: Sequelize.BOOLEAN
       },
-      createdAt: {
+      createdat: {
         allowNull: false,
         type: Sequelize.DATE
       },
-      updatedAt: {
+      updatedat: {
         allowNull: false,
         type: Sequelize.DATE
       }
     });
   },
   async down(queryInterface, Sequelize) {
-    await queryInterface.dropTable('Availabilities');
+    await queryInterface.dropTable('availabilities');
   }
 };

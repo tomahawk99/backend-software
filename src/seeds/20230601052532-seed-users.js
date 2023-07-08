@@ -3,33 +3,36 @@
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up (queryInterface, Sequelize) {
-    return queryInterface.bulkInsert('Users',[
+    return queryInterface.bulkInsert('users',[
       {
         id: 1,
         name: 'Tomas',
-        lastName: 'Concha',
+        lastname: 'Concha',
         email: 'tomas.concha@uc.cl',
         type: 'player',
-        createdAt: new Date(),
-        updatedAt: new Date()
+        password: '$2a$05$yUuSEPQqtRB5QfacCJvzseqR4L4fk.eQ.gCi1ZPZwrICdcDsOggEe',
+        createdat: new Date(),
+        updatedat: new Date()
       },
       {
         id: 0,
         name: 'ADMIN',
-        lastName: '',
+        lastname: '',
         email: 'admin@admin.cl',
         type: 'admin',
-        createdAt: new Date(),
-        updatedAt: new Date()
+        password: '$2a$05$yUuSEPQqtRB5QfacCJvzseqR4L4fk.eQ.gCi1ZPZwrICdcDsOggEe',
+        createdat: new Date(),
+        updatedat: new Date()
       },
       {
         id: 2,
         name: 'Jorge',
-        lastName: 'Gonzalez',
+        lastname: 'Gonzalez',
         email: 'jorgegonzalez@gmail.com',
         type: 'owner',
-        createdAt: new Date(),
-        updatedAt: new Date()
+        password: '$2a$05$yUuSEPQqtRB5QfacCJvzseqR4L4fk.eQ.gCi1ZPZwrICdcDsOggEe',
+        createdat: new Date(),
+        updatedat: new Date()
       },
     ])
     /**
@@ -43,6 +46,6 @@ module.exports = {
     */
   },
 
-  down: (queryInterface) => queryInterface.bulkDelete('Users', null, {}),
+  down: (queryInterface) => queryInterface.bulkDelete('users', null, {}),
 
 };
