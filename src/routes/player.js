@@ -40,53 +40,49 @@ router.get('/player', '/dates/:id', async(ctx) => {
   }
 });
 
-// LISTOO
-router.get('/player', '/datesinfo/:id/:fecha', async(ctx) => {
+router.get('/player', '/datesinfo/:id/:fecha', async (ctx) => {
   console.log("datesinfo");
   const canchaId = ctx.params.id;
   const fecha = ctx.params.fecha.toString();
-  try{
+  try {
     let new_dictionary = {};
     const Enclousure = await ctx.orm.enclousures.findByPk(canchaId);
     const Date = fecha;
 
-    console.log(Date);
     let dates = await ctx.orm.availabilities.findAll({
       where: {
         fieldid: Enclousure.id
       }
-    })
-    console.log(Object.keys(dates).length);
-    // Element = availability
-    dates.forEach(element => {
-      if (element.hour === null){
-       return;
-      }
-      let hour = element.hour
-      console.log("INFOOO");
-      console.log(element.hour);
-      console.log(element.id);
-      const n_bookings =  (async () => {
-        let n =await ctx.orm.bookings.count({ where: { availabilityid: element.id } });
-        console.log(element.hour, n);
-        return n
-      })();
-      console.log("a");
-      console.log(n_bookings);
-      console.log("b");
-      let variable = {quantity_bookings: n_bookings, hour: hour, EnclousureId: Enclousure.id, date: Date, availability_id: element.id };
-      
-      new_dictionary[hour] = variable;
-      
     });
+
+    console.log(Object.keys(dates).length);
+    
+    for (const element of dates) {
+      if (element.hour === null) {
+        continue;
+      }
+      
+      let hour = element.hour;
+      
+      let n = await ctx.orm.bookings.count({ where: { availabilityid: element.id } });
+  
+      new_dictionary[hour] = {
+        quantity_bookings: n,
+        hour: hour,
+        date: Date,
+        bool: element.available
+      };
+    }
+    
+    console.log("hola");
     ctx.body = new_dictionary;
-  }
-  catch(error){
+  } catch (error) {
     console.error(error);
     ctx.status = 500;
     ctx.body = { error: 'Failed to get data' };
   }
 });
+
 
 router.get('/player', '/getavailabilities/:id ', async (ctx) => {
   try {
