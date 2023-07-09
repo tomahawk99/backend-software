@@ -13,9 +13,9 @@ orm.sequelize
   .then(() => {
     console.log('Connection to the database has been established successfully.');
     app.listen(PORT, (err) => {
-      if (err) {
-        return console.error('Failed', err);
-      }
+      //if (err) {
+        //return console.error('Failed', err);
+      //}
       console.log(`Listening on port ${PORT}`);
       return app;
     });
