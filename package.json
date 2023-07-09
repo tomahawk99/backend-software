@@ -7,11 +7,9 @@
   "author": "Pablo Álvarez <palvarezs169@gmail.com>",
   "license": "MIT",
   "scripts": {
-
-    "start": "node src/index.js",
+    "start": "node src/index.js --host 0.0.0.0",
     "dev": "nodemon src/index.js",
     "test": "DB_USER=postgres DB_PASSWORD=\"1234\" DB_NAME=teamup_db DB_PORT=3002 jest --coverage --detectOpenHandles"
-
   },
   "devDependencies": {
     "jest": "^29.5.0",

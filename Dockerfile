@@ -17,4 +17,4 @@ COPY . /src
 CMD [ "npm", "start" ]
 
 # Exponer el puerto en el que la aplicación se ejecuta
-EXPOSE 3000
+EXPOSE 3001
