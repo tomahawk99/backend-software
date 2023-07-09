@@ -43,6 +43,167 @@ router.get('/ratings', '/info', async (ctx) => {
   }
 });
 
+
+// Get players from a booking?????
+// TO DO
+router.get('/ratings', '//:id', async (ctx) => {
+  try {
+    
+    
+
+  } catch (error) {
+    console.log(error);
+    ctx.throw(500);
+  }
+});
+
+
+
+
+// Rate a player
+router.post('/ratings', '/player/:id', async (ctx) => {
+  try {
+    playerId = ctx.params.id;
+    const player = await ctx.orm.users.findByPk(playerId);
+    
+    if (!player) {
+      ctx.status = 404;
+      ctx.body = { error: 'Player not found' };
+    }
+
+    else {
+      data = {
+        ratedid: playerId,
+        rating: ctx.request.body.rating,
+        type: 'player',
+      };
+
+      const rating = await ctx.orm.ratings.create(data);
+      ctx.body = rating;
+      ctx.status = 201;
+    }
+
+  } catch (error) {
+    console.log(error);
+    ctx.throw(500);
+  }
+});
+
+
+
+// Rate a Enclousure
+router.post('/ratings', '/enclousures/:id', async (ctx) => {
+  try {
+    enclousureId = ctx.params.id;
+    const enclousure = await ctx.orm.enclousures.findByPk(enclousureId);
+    
+    if (!enclousure) {
+      ctx.status = 404;
+      ctx.body = { error: 'Enclousure not found' };
+    }
+
+    else {
+      data = {
+        ratedid: enclousureId,
+        rating: ctx.request.body.rating,
+        type: 'enclousure',
+      };
+
+      const rating = await ctx.orm.ratings.create(data);
+      ctx.body = rating;
+      ctx.status = 201;
+    }
+
+  } catch (error) {
+    console.log(error);
+    ctx.throw(500);
+  }
+});
+
+
+
+// Get Ratings of a player
+router.get('/ratings', '/players/:id', async (ctx) => {
+  try {
+    playerId = ctx.params.id;
+    const player = await ctx.orm.users.findByPk(playerId);
+    
+    if (!player) {
+      ctx.status = 404;
+      ctx.body = { error: 'Player not found' };
+    }
+
+    else {
+      const ratings = await ctx.orm.ratings.findAll({
+        where: {
+          ratedid: playerId,
+          type: 'player',
+        },
+      });
+
+      if (ratings.length == 0){
+        console.log("no ratings")
+        ctx.status = 204;
+      }
+
+      else {
+        ctx.body = ratings;
+        ctx.status = 210;
+      }
+
+      
+    }
+
+  } catch (error) {
+    console.log(error);
+    ctx.throw(500);
+  }
+
+});
+
+
+
+// Get Ratings of an Enclousure
+router.get('/ratings', '/enclousures/:id', async (ctx) => {
+  try {
+    enclousureId = ctx.params.id;
+    const enclousure = await ctx.orm.enclousures.findByPk(enclousureId);
+    
+    if (!enclousure) {
+      ctx.status = 404;
+      ctx.body = { error: 'Enclousure not found' };
+    }
+
+    else {
+      const ratings = await ctx.orm.ratings.findAll({
+        where: {
+          ratedid: enclousureId,
+          type: 'enclousure',
+        },
+      });
+
+      if (ratings.length == 0){
+        console.log("no ratings")
+        ctx.status = 204;
+      }
+
+      else {
+        ctx.body = ratings;
+        ctx.status = 210;
+      }
+    }
+
+  } catch (error) {
+    console.log(error);
+    ctx.throw(500);
+  }
+
+});
+
+
+
+
+
 // Update a player
 router.put('/ratings', '/update',  async (ctx) => {
     try {
